@@ -11,6 +11,10 @@
 #THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #######################################################################################################################################################
 
+
+# Reference Documentation
+# https://www.compuphase.com/electronics/LibraryFileFormats.pdf
+
 import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk, Gdk, GdkPixbuf
@@ -757,11 +761,11 @@ class UKLCIG(Gtk.Window):
                    self.cur_signal_name_label.set_use_markup(True)
                    self.cur_pin_name_label.set_label("<b>"+str(nom[0][3])+"</b>")
                    self.cur_pin_name_label.set_use_markup(True)
-                   #self.cur_orientation_label.set_label("<b>"+str(nom[0][5])+"</b>")
+                   #self.cur_orientation_label.set_label("<b>"+str(nom[0][7])+"</b>")
                    #self.cur_orientation_label.set_use_markup(True)
-                   self.cur_type_label.set_label("<b>"+str(nom[0][10])+"</b>")
+                   self.cur_type_label.set_label("<b>"+str(nom[0][12])+"</b>")
                    self.cur_type_label.set_use_markup(True)
-                   self.cur_shape_label.set_label("<b>"+str(nom[0][11])+"</b>")
+                   self.cur_shape_label.set_label("<b>"+str(nom[0][13])+"</b>")
                    self.cur_shape_label.set_use_markup(True)
 
            if (self.MOUSE_X-w/2) >= self.ic_width/2 and (self.MOUSE_X-w/2) < self.ic_width/2+10+10 and (self.MOUSE_Y-h/2) >= -self.ic_length/2+0*10+5 and (self.MOUSE_Y-h/2) < -self.ic_length/2+self.max_pins_per_length*10+5+5:
@@ -786,11 +790,11 @@ class UKLCIG(Gtk.Window):
                    self.cur_signal_name_label.set_use_markup(True)
                    self.cur_pin_name_label.set_label("<b>"+str(nom[0][3])+"</b>")
                    self.cur_pin_name_label.set_use_markup(True)
-                   #self.cur_orientation_label.set_label("<b>"+str(nom[0][5])+"</b>")
+                   #self.cur_orientation_label.set_label("<b>"+str(nom[0][7])+"</b>")
                    #self.cur_orientation_label.set_use_markup(True)
-                   self.cur_type_label.set_label("<b>"+str(nom[0][10])+"</b>")
+                   self.cur_type_label.set_label("<b>"+str(nom[0][12])+"</b>")
                    self.cur_type_label.set_use_markup(True)
-                   self.cur_shape_label.set_label("<b>"+str(nom[0][11])+"</b>")
+                   self.cur_shape_label.set_label("<b>"+str(nom[0][13])+"</b>")
                    self.cur_shape_label.set_use_markup(True)
 
            if (self.MOUSE_X-w/2) >= -self.ic_width/2+0*10+5 and (self.MOUSE_X-w/2) < -self.ic_width/2+self.max_pins_per_width*10+5+5 and (self.MOUSE_Y-h/2) >= -self.ic_length/2-10-10 and (self.MOUSE_Y-h/2) < -self.ic_length/2-10+10:
@@ -815,11 +819,11 @@ class UKLCIG(Gtk.Window):
                    self.cur_signal_name_label.set_use_markup(True)
                    self.cur_pin_name_label.set_label("<b>"+str(nom[0][3])+"</b>")
                    self.cur_pin_name_label.set_use_markup(True)
-                   #self.cur_orientation_label.set_label("<b>"+str(nom[0][5])+"</b>")
+                   #self.cur_orientation_label.set_label("<b>"+str(nom[0][7])+"</b>")
                    #self.cur_orientation_label.set_use_markup(True)
-                   self.cur_type_label.set_label("<b>"+str(nom[0][10])+"</b>")
+                   self.cur_type_label.set_label("<b>"+str(nom[0][12])+"</b>")
                    self.cur_type_label.set_use_markup(True)
-                   self.cur_shape_label.set_label("<b>"+str(nom[0][11])+"</b>")
+                   self.cur_shape_label.set_label("<b>"+str(nom[0][13])+"</b>")
                    self.cur_shape_label.set_use_markup(True)
 
            if (self.MOUSE_X-w/2) >= -self.ic_width/2+0*10+5 and (self.MOUSE_X-w/2) < -self.ic_width/2+self.max_pins_per_width*10+5+5 and (self.MOUSE_Y-h/2) >= self.ic_length/2-10 and (self.MOUSE_Y-h/2) < self.ic_length/2+20:
@@ -844,15 +848,15 @@ class UKLCIG(Gtk.Window):
                    self.cur_signal_name_label.set_use_markup(True)
                    self.cur_pin_name_label.set_label("<b>"+str(nom[0][3])+"</b>")
                    self.cur_pin_name_label.set_use_markup(True)
-                   #self.cur_orientation_label.set_label("<b>"+str(nom[0][5])+"</b>")
+                   #self.cur_orientation_label.set_label("<b>"+str(nom[0][7])+"</b>")
                    #self.cur_orientation_label.set_use_markup(True)
-                   self.cur_type_label.set_label("<b>"+str(nom[0][10])+"</b>")
+                   self.cur_type_label.set_label("<b>"+str(nom[0][12])+"</b>")
                    self.cur_type_label.set_use_markup(True)
-                   self.cur_shape_label.set_label("<b>"+str(nom[0][11])+"</b>")
+                   self.cur_shape_label.set_label("<b>"+str(nom[0][13])+"</b>")
                    self.cur_shape_label.set_use_markup(True)
 
-        print self.PIN_X
-        print self.PIN_Y
+        #print self.PIN_X
+        #print self.PIN_Y
 
         self.darea.queue_draw()
 
@@ -1132,8 +1136,8 @@ class UKLCIG(Gtk.Window):
            cr.translate(w / 2, h / 2)
 
         cr.set_source_rgb(1, 0.3, 0.9)
-        for i in range(len(self.populate)):
-            print self.populate[i]
+        #for i in range(len(self.populate)):
+        #    print self.populate[i]
 
         # Get the current date and time
         cur_time = strftime("%d/%m/%Y-%H:%M:%S", gmtime())
@@ -1155,7 +1159,7 @@ class UKLCIG(Gtk.Window):
         self.RESULT += "ENDDEF" + "\n"
         self.RESULT += "#" + "\n"
         self.RESULT += "#End Library" + "\n"
-        print self.RESULT
+        #print self.RESULT
 
 def main():
 
