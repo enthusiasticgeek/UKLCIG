@@ -138,6 +138,35 @@ class UKLCIG(Gtk.Window):
         self.vbox.pack_start(self.hbox, False, False, 0)
 
         hseparator = Gtk.HSeparator()
+        self.ic_dimensions_label = Gtk.Label("")
+        self.ic_dimensions_label.set_label("<b>IC Dimensions (WxL)</b>")
+        self.ic_dimensions_label.modify_fg(Gtk.StateType.NORMAL, Gdk.Color.parse("darkgreen")[1])
+        self.ic_dimensions_label.set_use_markup(True)
+        self.ic_width_entry = Gtk.Entry()
+        self.ic_width_entry.set_visibility(True)
+        self.ic_width_entry.set_max_length(5)
+        self.ic_width_entry.set_text(str(self.ic_width))
+        self.ic_length_entry = Gtk.Entry()
+        self.ic_length_entry.set_visibility(True)
+        self.ic_length_entry.set_max_length(5)
+        self.ic_length_entry.set_text(str(self.ic_length))
+        self.ic_pins_label = Gtk.Label("")
+        self.ic_pins_label.set_label("<b>IC Pins</b>")
+        self.ic_pins_label.modify_fg(Gtk.StateType.NORMAL, Gdk.Color.parse("darkgreen")[1])
+        self.ic_pins_label.set_use_markup(True)
+        self.ic_pins_entry = Gtk.Entry()
+        self.ic_pins_entry.set_visibility(True)
+        self.ic_pins_entry.set_max_length(5)
+        self.ic_pins_entry.set_text(str(self.total_pins))
+
+        self.vbox1.pack_start(hseparator, False, False, 0)
+        self.vbox1.pack_start(self.ic_dimensions_label, False, False, 0)
+        self.vbox1.pack_start(self.ic_width_entry, False, False, 0)
+        self.vbox1.pack_start(self.ic_length_entry, False, False, 0)
+        self.vbox1.pack_start(self.ic_pins_label, False, False, 0)
+        self.vbox1.pack_start(self.ic_pins_entry, False, False, 0)
+
+        hseparator = Gtk.HSeparator()
         self.signal_name_label = Gtk.Label("")
         self.signal_name_label.set_label("<b>Signal Name</b>")
         self.signal_name_label.modify_fg(Gtk.StateType.NORMAL, Gdk.Color.parse("darkgreen")[1])
@@ -151,10 +180,10 @@ class UKLCIG(Gtk.Window):
         self.cur_signal_name_label.modify_fg(Gtk.StateType.NORMAL, Gdk.Color.parse("purple")[1])
         self.cur_signal_name_label.set_use_markup(True)
 
-        self.vbox1.pack_start(hseparator, False, False, 0)
-        self.vbox1.pack_start(self.signal_name_label, False, False, 0)
-        self.vbox1.pack_start(self.signal_name_entry, False, False, 0)
-        self.vbox1.pack_start(self.cur_signal_name_label, False, False, 0)
+        self.vbox2.pack_start(hseparator, False, False, 0)
+        self.vbox2.pack_start(self.signal_name_label, False, False, 0)
+        self.vbox2.pack_start(self.signal_name_entry, False, False, 0)
+        self.vbox2.pack_start(self.cur_signal_name_label, False, False, 0)
 
         hseparator = Gtk.HSeparator()
         self.pin_name_label = Gtk.Label("")
@@ -171,38 +200,38 @@ class UKLCIG(Gtk.Window):
         self.cur_pin_name_label.modify_fg(Gtk.StateType.NORMAL, Gdk.Color.parse("purple")[1])
         self.cur_pin_name_label.set_use_markup(True)
 
-        self.vbox2.pack_start(hseparator, False, False, 0)
-        self.vbox2.pack_start(self.pin_name_label, False, False, 0)
-        self.vbox2.pack_start(self.pin_name_entry, False, False, 0)
-        self.vbox2.pack_start(self.cur_pin_name_label, False, False, 0)
-
-        hseparator = Gtk.HSeparator()
-        self.orientation_label = Gtk.Label("")
-        self.orientation_label.set_label("<b>Orientation</b>")
-        self.orientation_label.modify_fg(Gtk.StateType.NORMAL, Gdk.Color.parse("darkgreen")[1])
-        self.orientation_label.set_use_markup(True)
-        self.orientation_combobox = Gtk.ComboBox()
-        self.orientation_liststore = Gtk.ListStore(str)
-        self.orientation_cell = Gtk.CellRendererText()
-        self.orientation_combobox.pack_start(self.orientation_cell,0)
-        self.orientation_combobox.add_attribute(self.orientation_cell, 'text', 0)
-        self.orientation_combobox.set_wrap_width(2)
-        self.orientation_liststore.append(['Left'])
-        self.orientation_liststore.append(['Right'])
-        self.orientation_liststore.append(['Up'])
-        self.orientation_liststore.append(['Down'])
-        self.orientation_combobox.set_model(self.orientation_liststore)
-        self.orientation_combobox.connect('changed', self.orientation_callback)
-        self.orientation_combobox.set_active(0)
-        self.cur_orientation_label = Gtk.Label("")
-        self.cur_orientation_label.set_label("<b>N/A</b>")
-        self.cur_orientation_label.modify_fg(Gtk.StateType.NORMAL, Gdk.Color.parse("purple")[1])
-        self.cur_orientation_label.set_use_markup(True)
-
         self.vbox3.pack_start(hseparator, False, False, 0)
-        self.vbox3.pack_start(self.orientation_label, False, False, 0)
-        self.vbox3.pack_start(self.orientation_combobox, False, False, 0)
-        self.vbox3.pack_start(self.cur_orientation_label, False, False, 0)
+        self.vbox3.pack_start(self.pin_name_label, False, False, 0)
+        self.vbox3.pack_start(self.pin_name_entry, False, False, 0)
+        self.vbox3.pack_start(self.cur_pin_name_label, False, False, 0)
+
+        #hseparator = Gtk.HSeparator()
+        #self.orientation_label = Gtk.Label("")
+        #self.orientation_label.set_label("<b>Orientation</b>")
+        #self.orientation_label.modify_fg(Gtk.StateType.NORMAL, Gdk.Color.parse("darkgreen")[1])
+        #self.orientation_label.set_use_markup(True)
+        #self.orientation_combobox = Gtk.ComboBox()
+        #self.orientation_liststore = Gtk.ListStore(str)
+        #self.orientation_cell = Gtk.CellRendererText()
+        #self.orientation_combobox.pack_start(self.orientation_cell,0)
+        #self.orientation_combobox.add_attribute(self.orientation_cell, 'text', 0)
+        #self.orientation_combobox.set_wrap_width(2)
+        #self.orientation_liststore.append(['Left'])
+        #self.orientation_liststore.append(['Right'])
+        #self.orientation_liststore.append(['Up'])
+        #self.orientation_liststore.append(['Down'])
+        #self.orientation_combobox.set_model(self.orientation_liststore)
+        #self.orientation_combobox.connect('changed', self.orientation_callback)
+        #self.orientation_combobox.set_active(0)
+        #self.cur_orientation_label = Gtk.Label("")
+        #self.cur_orientation_label.set_label("<b>N/A</b>")
+        #self.cur_orientation_label.modify_fg(Gtk.StateType.NORMAL, Gdk.Color.parse("purple")[1])
+        #self.cur_orientation_label.set_use_markup(True)
+
+        #self.vbox3.pack_start(hseparator, False, False, 0)
+        #self.vbox3.pack_start(self.orientation_label, False, False, 0)
+        #self.vbox3.pack_start(self.orientation_combobox, False, False, 0)
+        #self.vbox3.pack_start(self.cur_orientation_label, False, False, 0)
 
         hseparator = Gtk.HSeparator()
         self.type_label = Gtk.Label("")
@@ -314,6 +343,30 @@ class UKLCIG(Gtk.Window):
         self.show_all()
 
     def on_update_pin_button(self, widget, data=None):
+        self.total_pins = int(self.ic_pins_entry.get_text())
+        self.ic_width = int(self.ic_width_entry.get_text())
+        self.ic_length = int(self.ic_length_entry.get_text())
+
+        # Can we populate the total pins along the perimeter?
+        perimeter = 2 * (self.ic_width + self.ic_length)
+
+        # assume pin width = 5 and gap between pins = 5
+        self.max_pins_per_width = self.ic_width / (10)
+        self.max_pins_per_length = self.ic_length / (10)
+
+        # Max pins that can be drawn sanely
+        max_pins = 0
+        if (self.sides == 2):
+            max_pins = 2 * (self.max_pins_per_length)
+        elif (self.sides == 4):
+            max_pins = 2 * (self.max_pins_per_width + self.max_pins_per_length)
+
+        # Max pins requested is less than or equal to pins that may be drawn?
+        if self.total_pins > max_pins:
+            cr.move_to(-self.ic_width/2+10,0) 
+            cr.show_text("Pins count doesn't fit along the IC perimeter. Reduce pins or increase IC dimensions.")
+            return False
+
         if self.cur_pin_selected != -1:
            nom = [x for x in self.populate if (x[0] == self.cur_direction and x[1] == self.cur_pin_selected)]
            #Entry already exists simply update the contents
