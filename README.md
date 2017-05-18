@@ -2,7 +2,7 @@
  UnOfficial KiCAD Library Component IC Generator (UKLCIG) 
 
 # UKBFG
-![alt text](https://github.com/enthusiasticgeek/UKBFG/blob/master/UKBFG.png "UKBFG")
+![alt text](https://github.com/enthusiasticgeek/UKLCIG/blob/master/UKLCIG.png "UKLCIG")
 # UnOfficial KiCAD Library Component (PCB) IC Generator
 
 This is a simple python based tool to generate IC Library Component PCB library files for KiCAD EDA http://kicad-pcb.org/.
