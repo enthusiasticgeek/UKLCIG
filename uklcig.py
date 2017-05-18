@@ -771,12 +771,12 @@ class UKLCIG(Gtk.Window):
                 print "Set current pin [West]"
                 self.cur_pin_selected = self.cur_pin_west
                 self.cur_direction = Directions.WEST
-                self.Orientation = 'L'
+                self.Orientation = 'R'
                 #Update Pin
                 self.update_pin_label.set_label("<b>WEST "+str(self.cur_pin_selected)+"</b>")
                 self.update_pin_label.set_use_markup(True) 
                 #assign pin coordinates
-                self.PIN_X = -self.ic_width/2
+                self.PIN_X = -(self.ic_width/2+300)
                 self.PIN_Y = -self.ic_length/2+self.cur_pin_selected*10+5
                 nom = [x for x in self.populate if(x[0]==Directions.WEST and x[1]==self.cur_pin_selected)]
                 if nom:
@@ -800,12 +800,12 @@ class UKLCIG(Gtk.Window):
                 print "Set current pin [East]"
                 self.cur_pin_selected = self.cur_pin_east
                 self.cur_direction = Directions.EAST
-                self.Orientation = 'R'
+                self.Orientation = 'L'
                 #Update Pin
                 self.update_pin_label.set_label("<b>EAST "+str(self.cur_pin_selected)+"</b>")
                 self.update_pin_label.set_use_markup(True) 
                 #assign pin coordinates
-                self.PIN_X = self.ic_width/2
+                self.PIN_X = self.ic_width/2+300
                 self.PIN_Y = -self.ic_length/2+self.cur_pin_selected*10+5
                 nom = [x for x in self.populate if(x[0]==Directions.EAST and x[1]==self.cur_pin_selected)]
                 if nom:
@@ -829,13 +829,13 @@ class UKLCIG(Gtk.Window):
                 print "Set current pin [North]"
                 self.cur_pin_selected = self.cur_pin_north
                 self.cur_direction = Directions.NORTH
-                self.Orientation = 'U'
+                self.Orientation = 'D'
                 #Update Pin
                 self.update_pin_label.set_label("<b>NORTH "+str(self.cur_pin_selected)+"</b>")
                 self.update_pin_label.set_use_markup(True) 
                 #assign pin coordinates
                 self.PIN_X = -self.ic_width/2+self.cur_pin_selected*10+5
-                self.PIN_Y = -self.ic_length/2
+                self.PIN_Y = self.ic_length/2+300
                 nom = [x for x in self.populate if(x[0]==Directions.NORTH and x[1]==self.cur_pin_selected)]
                 if nom:
                    self.cur_signal_name_label.set_label("<b>"+str(nom[0][2])+"</b>")
@@ -858,13 +858,13 @@ class UKLCIG(Gtk.Window):
                 print "Set current pin [South]"
                 self.cur_pin_selected = self.cur_pin_south
                 self.cur_direction = Directions.SOUTH
-                self.Orientation = 'D'
+                self.Orientation = 'U'
                 #Update Pin
                 self.update_pin_label.set_label("<b>SOUTH "+str(self.cur_pin_selected)+"</b>")
                 self.update_pin_label.set_use_markup(True) 
                 #assign pin coordinates
                 self.PIN_X = -self.ic_width/2+self.cur_pin_selected*10+5
-                self.PIN_Y = self.ic_length/2
+                self.PIN_Y = -(self.ic_length/2+300)
                 nom = [x for x in self.populate if(x[0]==Directions.SOUTH and x[1]==self.cur_pin_selected)]
                 if nom:
                    self.cur_signal_name_label.set_label("<b>"+str(nom[0][2])+"</b>")
