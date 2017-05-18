@@ -407,6 +407,17 @@ class UKLCIG(Gtk.Window):
         self.show_all()
    
     def on_save_button(self, widget):
+
+        # If there are spaces then reject
+        if ' ' in self.ic_name_entry.get_text():
+           dialog = Gtk.MessageDialog(self, 0, Gtk.MessageType.ERROR,
+                    Gtk.ButtonsType.CANCEL, "IC name contain spaces")
+           dialog.format_secondary_text(
+                    "IC name cannot contain spaces.")
+           dialog.run()
+           dialog.destroy()
+           return False
+
         #self.LIBRARY = str(self.save_entry.get_text())
         dialog = Gtk.FileChooserDialog("Please choose a kicad file", self,
             Gtk.FileChooserAction.SAVE,
@@ -486,6 +497,18 @@ class UKLCIG(Gtk.Window):
 
     def on_update_pin_button(self, widget, data=None):
         # Redo IC dimensions - TODO check if this portion makes sense or is redundant
+ 
+        # If there are spaces then reject
+        if ' ' in (self.signal_name_entry.get_text() or self.pin_name_entry.get_text()):
+           dialog = Gtk.MessageDialog(self, 0, Gtk.MessageType.ERROR,
+                    Gtk.ButtonsType.CANCEL, "Signal or Pin name contain spaces")
+           dialog.format_secondary_text(
+                    "Signal or Pin names cannot contain spaces.")
+           dialog.run()
+           dialog.destroy()
+           return False
+
+        # Otherwise proceed
         self.ic_width = int(self.ic_width_entry.get_text())
         self.ic_length = int(self.ic_length_entry.get_text())
 
@@ -1142,7 +1165,7 @@ class UKLCIG(Gtk.Window):
         # Get the current date and time
         cur_time = strftime("%d/%m/%Y-%H:%M:%S", gmtime())
         #Now form the Library Component
-        self.RESULT += "#EESchema-LIBRARY Version 2.2  Date: " + str(cur_time) + "\n" 
+        self.RESULT += "EESchema-LIBRARY Version 2.3  Date: " + str(cur_time) + "\n" 
         self.RESULT += "#" + "\n" 
         self.RESULT += "# "+ self.ic_name_entry.get_text() + "\n" 
         self.RESULT += "#" + "\n" 
@@ -1151,6 +1174,10 @@ class UKLCIG(Gtk.Window):
         self.RESULT += "F1 \"" + self.ic_name_entry.get_text() + "\" 0 100 50 H V C C" + "\n" 
         self.RESULT += "F2 \"MODULE\" 0 0 50 H I C C" + "\n" 
         self.RESULT += "F3 \"DOCUMENTATION\" 0 0 50 H I C C" + "\n" 
+        self.RESULT += "ALIAS " + self.ic_name_entry.get_text() + "\n"
+        self.RESULT += "$FPLIST" + "\n"
+        self.RESULT += " # Enter all the allowed Foot Prints here - one on each line"
+        self.RESULT += "$ENDFPLIST" + "\n"
         self.RESULT += "DRAW" + "\n"
         self.RESULT += "S -" + str(self.ic_width/2) + " -" + str(self.ic_length/2) + " "+ str(self.ic_width/2) +" " + str(self.ic_length/2) +" 1 0 0 N" + "\n"
         for j in self.populate:
