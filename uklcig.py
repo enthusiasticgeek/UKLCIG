@@ -567,7 +567,7 @@ class UKLCIG(Gtk.Window):
         about.set_copyright("Copyright (c) 2017 Pratik M Tambe <enthusiasticgeek@gmail.com>")
         about.set_comments("A simple tool for generating KiCAD IC Library Component")
         about.set_website("https://github.com/enthusiasticgeek")
-        #about.set_logo(GdkPixbuf.Pixbuf.new_from_file_at_size("UKBFG.png", 300, 185))
+        about.set_logo(GdkPixbuf.Pixbuf.new_from_file_at_size("UKLCIG.png", 300, 185))
         about.run()
         about.destroy()
 
