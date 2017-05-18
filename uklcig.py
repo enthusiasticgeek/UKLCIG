@@ -14,6 +14,7 @@
 import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk, Gdk
+from time import gmtime, strftime
 import cairo
 import math
 import signal
@@ -157,6 +158,14 @@ class UKLCIG(Gtk.Window):
         self.vbox.pack_start(self.hbox, False, False, 0)
 
         hseparator = Gtk.HSeparator()
+        self.ic_name_label = Gtk.Label("")
+        self.ic_name_label.set_label("<b>IC Name</b>")
+        self.ic_name_label.modify_fg(Gtk.StateType.NORMAL, Gdk.Color.parse("darkgreen")[1])
+        self.ic_name_label.set_use_markup(True)
+        self.ic_name_entry = Gtk.Entry()
+        self.ic_name_entry.set_visibility(True)
+        self.ic_name_entry.set_max_length(32)
+        self.ic_name_entry.set_text("Enter IC Name")
         self.ic_dimensions_label = Gtk.Label("")
         self.ic_dimensions_label.set_label("<b>IC Dimensions (WxL)</b>")
         self.ic_dimensions_label.modify_fg(Gtk.StateType.NORMAL, Gdk.Color.parse("darkgreen")[1])
@@ -169,11 +178,20 @@ class UKLCIG(Gtk.Window):
         self.ic_length_entry.set_visibility(True)
         self.ic_length_entry.set_max_length(5)
         self.ic_length_entry.set_text(str(self.ic_length))
+        self.ic_dimensions_button = Gtk.Button("")
+        for child in self.ic_dimensions_button :
+            child.set_label("<b>Update IC Dimensions</b>")
+            child.set_use_markup(True)
+            child.modify_fg(Gtk.StateType.NORMAL, Gdk.Color.parse("darkred")[1])
+        self.ic_dimensions_button.connect("clicked", self.on_ic_dimensions_button, "ic dimensions update button")
 
         self.vbox1.pack_start(hseparator, False, False, 0)
+        self.vbox1.pack_start(self.ic_name_label, False, False, 0)
+        self.vbox1.pack_start(self.ic_name_entry, False, False, 0)
         self.vbox1.pack_start(self.ic_dimensions_label, False, False, 0)
         self.vbox1.pack_start(self.ic_width_entry, False, False, 0)
         self.vbox1.pack_start(self.ic_length_entry, False, False, 0)
+        self.vbox1.pack_start(self.ic_dimensions_button, False, False, 0)
 
         hseparator = Gtk.HSeparator()
         self.signal_name_label = Gtk.Label("")
@@ -318,7 +336,7 @@ class UKLCIG(Gtk.Window):
         hseparator = Gtk.HSeparator()
         self.update_pin_label = Gtk.Label("")
         self.update_pin_label.set_label("<b>Update Selected Pin</b>")
-        self.update_pin_label.modify_fg(Gtk.StateType.NORMAL, Gdk.Color.parse("darkgreen")[1])
+        self.update_pin_label.modify_fg(Gtk.StateType.NORMAL, Gdk.Color.parse("red")[1])
         self.update_pin_label.set_use_markup(True)
         self.update_pin_button = Gtk.Button("")
         for child in self.update_pin_button :
@@ -350,8 +368,31 @@ class UKLCIG(Gtk.Window):
 
         self.add(self.vbox)
         self.show_all()
+   
+    def on_ic_dimensions_button(self, widget, data=None):
+        self.ic_width = int(self.ic_width_entry.get_text())
+        self.ic_length = int(self.ic_length_entry.get_text())
+
+        # Can we populate the total pins along the perimeter?
+        perimeter = 2 * (self.ic_width + self.ic_length)
+
+        # assume pin width = 5 and gap between pins = 5
+        self.max_pins_per_width = self.ic_width / (10)
+        self.max_pins_per_length = self.ic_length / (10)
+
+        # Max pins that can be drawn sanely
+        max_pins = 0
+        if (self.sides == 2):
+            max_pins = 2 * (self.max_pins_per_length)
+        elif (self.sides == 4):
+            max_pins = 2 * (self.max_pins_per_width + self.max_pins_per_length)
+
+        # Max pins requested is less than or equal to pins that may be drawn?
+        self.total_pins = max_pins
+
 
     def on_update_pin_button(self, widget, data=None):
+        # Redo IC dimensions - TODO check if this portion makes sense or is redundant
         self.ic_width = int(self.ic_width_entry.get_text())
         self.ic_length = int(self.ic_length_entry.get_text())
 
@@ -396,8 +437,8 @@ class UKLCIG(Gtk.Window):
                     self.cur_signal_name_label.set_use_markup(True)
                     self.cur_pin_name_label.set_label("<b>"+str(self.populate[i][3])+"</b>")
                     self.cur_pin_name_label.set_use_markup(True)
-                    self.cur_orientation_label.set_label("<b>"+str(self.populate[i][5])+"</b>")
-                    self.cur_orientation_label.set_use_markup(True)
+                    #self.cur_orientation_label.set_label("<b>"+str(self.populate[i][5])+"</b>")
+                    #self.cur_orientation_label.set_use_markup(True)
                     self.cur_type_label.set_label("<b>"+str(self.populate[i][10])+"</b>")
                     self.cur_type_label.set_use_markup(True)
                     self.cur_shape_label.set_label("<b>"+str(self.populate[i][11])+"</b>")
@@ -415,8 +456,8 @@ class UKLCIG(Gtk.Window):
                     self.cur_signal_name_label.set_use_markup(True)
                     self.cur_pin_name_label.set_label("<b>"+str(self.populate[i][3])+"</b>")
                     self.cur_pin_name_label.set_use_markup(True)
-                    self.cur_orientation_label.set_label("<b>"+str(self.populate[i][5])+"</b>")
-                    self.cur_orientation_label.set_use_markup(True)
+                    #self.cur_orientation_label.set_label("<b>"+str(self.populate[i][5])+"</b>")
+                    #self.cur_orientation_label.set_use_markup(True)
                     self.cur_type_label.set_label("<b>"+str(self.populate[i][10])+"</b>")
                     self.cur_type_label.set_use_markup(True)
                     self.cur_shape_label.set_label("<b>"+str(self.populate[i][11])+"</b>")
@@ -618,14 +659,17 @@ class UKLCIG(Gtk.Window):
                 #Update Pin
                 self.update_pin_label.set_label("<b>WEST "+str(self.cur_pin_selected)+"</b>")
                 self.update_pin_label.set_use_markup(True) 
+                #assign pin coordinates
+                self.PIN_X = -self.ic_width/2
+                self.PIN_Y = -self.ic_length/2+self.cur_pin_selected*10+5
                 nom = [x for x in self.populate if(x[0]==Directions.WEST and x[1]==self.cur_pin_selected)]
                 if nom:
                    self.cur_signal_name_label.set_label("<b>"+str(nom[0][2])+"</b>")
                    self.cur_signal_name_label.set_use_markup(True)
                    self.cur_pin_name_label.set_label("<b>"+str(nom[0][3])+"</b>")
                    self.cur_pin_name_label.set_use_markup(True)
-                   self.cur_orientation_label.set_label("<b>"+str(nom[0][5])+"</b>")
-                   self.cur_orientation_label.set_use_markup(True)
+                   #self.cur_orientation_label.set_label("<b>"+str(nom[0][5])+"</b>")
+                   #self.cur_orientation_label.set_use_markup(True)
                    self.cur_type_label.set_label("<b>"+str(nom[0][10])+"</b>")
                    self.cur_type_label.set_use_markup(True)
                    self.cur_shape_label.set_label("<b>"+str(nom[0][11])+"</b>")
@@ -644,14 +688,17 @@ class UKLCIG(Gtk.Window):
                 #Update Pin
                 self.update_pin_label.set_label("<b>EAST "+str(self.cur_pin_selected)+"</b>")
                 self.update_pin_label.set_use_markup(True) 
+                #assign pin coordinates
+                self.PIN_X = self.ic_width/2
+                self.PIN_Y = -self.ic_length/2+self.cur_pin_selected*10+5
                 nom = [x for x in self.populate if(x[0]==Directions.EAST and x[1]==self.cur_pin_selected)]
                 if nom:
                    self.cur_signal_name_label.set_label("<b>"+str(nom[0][2])+"</b>")
                    self.cur_signal_name_label.set_use_markup(True)
                    self.cur_pin_name_label.set_label("<b>"+str(nom[0][3])+"</b>")
                    self.cur_pin_name_label.set_use_markup(True)
-                   self.cur_orientation_label.set_label("<b>"+str(nom[0][5])+"</b>")
-                   self.cur_orientation_label.set_use_markup(True)
+                   #self.cur_orientation_label.set_label("<b>"+str(nom[0][5])+"</b>")
+                   #self.cur_orientation_label.set_use_markup(True)
                    self.cur_type_label.set_label("<b>"+str(nom[0][10])+"</b>")
                    self.cur_type_label.set_use_markup(True)
                    self.cur_shape_label.set_label("<b>"+str(nom[0][11])+"</b>")
@@ -670,14 +717,17 @@ class UKLCIG(Gtk.Window):
                 #Update Pin
                 self.update_pin_label.set_label("<b>NORTH "+str(self.cur_pin_selected)+"</b>")
                 self.update_pin_label.set_use_markup(True) 
+                #assign pin coordinates
+                self.PIN_X = -self.ic_width/2+self.cur_pin_selected*10+5
+                self.PIN_Y = -self.ic_length/2
                 nom = [x for x in self.populate if(x[0]==Directions.NORTH and x[1]==self.cur_pin_selected)]
                 if nom:
                    self.cur_signal_name_label.set_label("<b>"+str(nom[0][2])+"</b>")
                    self.cur_signal_name_label.set_use_markup(True)
                    self.cur_pin_name_label.set_label("<b>"+str(nom[0][3])+"</b>")
                    self.cur_pin_name_label.set_use_markup(True)
-                   self.cur_orientation_label.set_label("<b>"+str(nom[0][5])+"</b>")
-                   self.cur_orientation_label.set_use_markup(True)
+                   #self.cur_orientation_label.set_label("<b>"+str(nom[0][5])+"</b>")
+                   #self.cur_orientation_label.set_use_markup(True)
                    self.cur_type_label.set_label("<b>"+str(nom[0][10])+"</b>")
                    self.cur_type_label.set_use_markup(True)
                    self.cur_shape_label.set_label("<b>"+str(nom[0][11])+"</b>")
@@ -696,18 +746,24 @@ class UKLCIG(Gtk.Window):
                 #Update Pin
                 self.update_pin_label.set_label("<b>SOUTH "+str(self.cur_pin_selected)+"</b>")
                 self.update_pin_label.set_use_markup(True) 
+                #assign pin coordinates
+                self.PIN_X = -self.ic_width/2+self.cur_pin_selected*10+5
+                self.PIN_Y = self.ic_length/2
                 nom = [x for x in self.populate if(x[0]==Directions.SOUTH and x[1]==self.cur_pin_selected)]
                 if nom:
                    self.cur_signal_name_label.set_label("<b>"+str(nom[0][2])+"</b>")
                    self.cur_signal_name_label.set_use_markup(True)
                    self.cur_pin_name_label.set_label("<b>"+str(nom[0][3])+"</b>")
                    self.cur_pin_name_label.set_use_markup(True)
-                   self.cur_orientation_label.set_label("<b>"+str(nom[0][5])+"</b>")
-                   self.cur_orientation_label.set_use_markup(True)
+                   #self.cur_orientation_label.set_label("<b>"+str(nom[0][5])+"</b>")
+                   #self.cur_orientation_label.set_use_markup(True)
                    self.cur_type_label.set_label("<b>"+str(nom[0][10])+"</b>")
                    self.cur_type_label.set_use_markup(True)
                    self.cur_shape_label.set_label("<b>"+str(nom[0][11])+"</b>")
                    self.cur_shape_label.set_use_markup(True)
+
+        print self.PIN_X
+        print self.PIN_Y
 
         self.darea.queue_draw()
 
@@ -986,6 +1042,28 @@ class UKLCIG(Gtk.Window):
         cr.set_source_rgb(1, 0.3, 0.9)
         for i in range(len(self.populate)):
             print self.populate[i]
+
+        # Get the current date and time
+        cur_time = strftime("%d/%m/%Y-%H:%M:%S", gmtime())
+        #Now form the Library Component
+        self.RESULT += "#EESchema-LIBRARY Version 2.2  Date: " + str(cur_time) + "\n" 
+        self.RESULT += "#" + "\n" 
+        self.RESULT += "# "+ self.ic_name_entry.get_text() + "\n" 
+        self.RESULT += "#" + "\n" 
+        self.RESULT += "DEF " + self.ic_name_entry.get_text() + " U 0 40 Y Y 1 0 N" + "\n" 
+        self.RESULT += "F0 \"U\" 0 -100 50 H V C C" + "\n" 
+        self.RESULT += "F1 \"" + self.ic_name_entry.get_text() + "\" 0 100 50 H V C C" + "\n" 
+        self.RESULT += "F2 \"MODULE\" 0 0 50 H I C C" + "\n" 
+        self.RESULT += "F3 \"DOCUMENTATION\" 0 0 50 H I C C" + "\n" 
+        self.RESULT += "DRAW" + "\n"
+        self.RESULT += "S -" + str(self.ic_width/2) + " -" + str(self.ic_length/2) + " "+ str(self.ic_width/2) +" " + str(self.ic_length/2) +" 1 0 0 N" + "\n"
+        for j in self.populate:
+            self.RESULT += "X "+str(j[2])+" "+str(j[3])+" "+str(j[4])+" "+str(j[5])+" "+str(j[6])+" "+str(j[7])+" "+str(j[8])+" "+str(j[9])+" "+str(j[10])+" "+str(j[11])+" "+str(j[12])+" "+str(j[13])+"\n"
+        self.RESULT += "ENDDRAW" + "\n"
+        self.RESULT += "ENDDEF" + "\n"
+        self.RESULT += "#" + "\n"
+        self.RESULT += "#End Library" + "\n"
+        print self.RESULT
 
 def main():
 
