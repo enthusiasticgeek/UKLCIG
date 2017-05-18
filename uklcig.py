@@ -13,7 +13,7 @@
 
 import gi
 gi.require_version('Gtk', '3.0')
-from gi.repository import Gtk, Gdk
+from gi.repository import Gtk, Gdk, GdkPixbuf
 from time import gmtime, strftime
 import cairo
 import math
@@ -361,10 +361,24 @@ class UKLCIG(Gtk.Window):
             child.set_use_markup(True)
             child.modify_fg(Gtk.StateType.NORMAL, Gdk.Color.parse("darkred")[1])
         self.crosshair_button.connect("clicked", self.on_crosshair_button, "crosshair button")
+        self.about_button = Gtk.Button("")
+        for child in self.about_button :
+            child.set_label("<b>About</b>")
+            child.set_use_markup(True)
+            child.modify_fg(Gtk.StateType.NORMAL, Gdk.Color.parse("darkred")[1])
+        self.about_button.connect("clicked", self.on_about_button)
+        self.exit_button = Gtk.Button("")
+        for child in self.exit_button :
+            child.set_label("<b>Exit</b>")
+            child.set_use_markup(True)
+            child.modify_fg(Gtk.StateType.NORMAL, Gdk.Color.parse("darkred")[1])
+        self.exit_button.connect("clicked", self.on_exit_button)
 
         self.vbox7.pack_start(hseparator, False, False, 0)
         self.vbox7.pack_start(self.misc_label, False, False, 0)
         self.vbox7.pack_start(self.crosshair_button, False, False, 0)
+        self.vbox7.pack_start(self.about_button, False, False, 0)
+        self.vbox7.pack_start(self.exit_button, False, False, 0)
 
         self.add(self.vbox)
         self.show_all()
@@ -474,7 +488,7 @@ class UKLCIG(Gtk.Window):
         about.set_copyright("Copyright (c) 2017 Pratik M Tambe <enthusiasticgeek@gmail.com>")
         about.set_comments("A simple tool for generating KiCAD IC Library Component")
         about.set_website("https://github.com/enthusiasticgeek")
-        about.set_logo(GdkPixbuf.Pixbuf.new_from_file_at_size("UKBFG.png", 300, 185))
+        #about.set_logo(GdkPixbuf.Pixbuf.new_from_file_at_size("UKBFG.png", 300, 185))
         about.run()
         about.destroy()
 
