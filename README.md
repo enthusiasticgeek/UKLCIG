@@ -1,7 +1,7 @@
 # UKLCIG
  UnOfficial KiCAD Library Component IC Generator (UKLCIG) 
 
-# UKBFG
+# UKLCIG
 ![alt text](https://github.com/enthusiasticgeek/UKLCIG/blob/master/UKLCIG.png "UKLCIG")
 # UnOfficial KiCAD Library Component (PCB) IC Generator
 
