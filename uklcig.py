@@ -18,6 +18,7 @@ from time import gmtime, strftime
 import cairo
 import math
 import signal
+import os
 
 UI_INFO = """
 <ui>
@@ -141,6 +142,7 @@ class UKLCIG(Gtk.Window):
         self.connect("delete-event", Gtk.main_quit)
 
         self.hbox = Gtk.HBox(False,2)
+        self.vbox0 = Gtk.VBox(False,2)
         self.vbox1 = Gtk.VBox(False,2)
         self.vbox2 = Gtk.VBox(False,2)
         self.vbox3 = Gtk.VBox(False,2)
@@ -148,6 +150,7 @@ class UKLCIG(Gtk.Window):
         self.vbox5 = Gtk.VBox(False,2)
         self.vbox6 = Gtk.VBox(False,2)
         self.vbox7 = Gtk.VBox(False,2)
+        self.hbox.pack_start(self.vbox0, False, False, 0)
         self.hbox.pack_start(self.vbox1, False, False, 0)
         self.hbox.pack_start(self.vbox2, False, False, 0)
         self.hbox.pack_start(self.vbox3, False, False, 0)
@@ -165,6 +168,26 @@ class UKLCIG(Gtk.Window):
         self.ic_name_entry = Gtk.Entry()
         self.ic_name_entry.set_visibility(True)
         self.ic_name_entry.set_max_length(32)
+        self.about_button = Gtk.Button("")
+        for child in self.about_button :
+            child.set_label("<b>About</b>")
+            child.set_use_markup(True)
+            child.modify_fg(Gtk.StateType.NORMAL, Gdk.Color.parse("darkred")[1])
+        self.about_button.connect("clicked", self.on_about_button)
+        self.exit_button = Gtk.Button("")
+        for child in self.exit_button :
+            child.set_label("<b>Exit</b>")
+            child.set_use_markup(True)
+            child.modify_fg(Gtk.StateType.NORMAL, Gdk.Color.parse("darkred")[1])
+        self.exit_button.connect("clicked", self.on_exit_button)
+
+        self.vbox0.pack_start(hseparator, False, False, 0)
+        self.vbox0.pack_start(self.ic_name_label, False, False, 0)
+        self.vbox0.pack_start(self.ic_name_entry, False, False, 0)
+        self.vbox0.pack_start(self.about_button, False, False, 0)
+        self.vbox0.pack_start(self.exit_button, False, False, 0)
+
+        hseparator = Gtk.HSeparator()
         self.ic_name_entry.set_text("Enter IC Name")
         self.ic_dimensions_label = Gtk.Label("")
         self.ic_dimensions_label.set_label("<b>IC Dimensions (WxL)</b>")
@@ -186,8 +209,6 @@ class UKLCIG(Gtk.Window):
         self.ic_dimensions_button.connect("clicked", self.on_ic_dimensions_button, "ic dimensions update button")
 
         self.vbox1.pack_start(hseparator, False, False, 0)
-        self.vbox1.pack_start(self.ic_name_label, False, False, 0)
-        self.vbox1.pack_start(self.ic_name_entry, False, False, 0)
         self.vbox1.pack_start(self.ic_dimensions_label, False, False, 0)
         self.vbox1.pack_start(self.ic_width_entry, False, False, 0)
         self.vbox1.pack_start(self.ic_length_entry, False, False, 0)
@@ -335,54 +356,108 @@ class UKLCIG(Gtk.Window):
 
         hseparator = Gtk.HSeparator()
         self.update_pin_label = Gtk.Label("")
-        self.update_pin_label.set_label("<b>Update Selected Pin</b>")
+        self.update_pin_label.set_label("<b>Update Pin</b>")
         self.update_pin_label.modify_fg(Gtk.StateType.NORMAL, Gdk.Color.parse("red")[1])
         self.update_pin_label.set_use_markup(True)
         self.update_pin_button = Gtk.Button("")
         for child in self.update_pin_button :
-            child.set_label("<b>Update Pin Attributes</b>")
+            child.set_label("<b>Update Pin</b>")
             child.set_use_markup(True)
             child.modify_fg(Gtk.StateType.NORMAL, Gdk.Color.parse("darkred")[1])
-
-        self.vbox6.pack_start(hseparator, False, False, 0)
-        self.vbox6.pack_start(self.update_pin_label, False, False, 0)
-        self.vbox6.pack_start(self.update_pin_button, False, False, 0)
-       
-        self.update_pin_button.connect("clicked", self.on_update_pin_button, "update pins")
-
-        hseparator = Gtk.HSeparator()
-        self.misc_label = Gtk.Label("")
-        self.misc_label.set_label("<b>Miscellaneous</b>")
-        self.misc_label.modify_fg(Gtk.StateType.NORMAL, Gdk.Color.parse("darkgreen")[1])
-        self.misc_label.set_use_markup(True)
         self.crosshair_button = Gtk.CheckButton("")
         for child in self.crosshair_button :
             child.set_label("<b>Cross Hair</b>")
             child.set_use_markup(True)
             child.modify_fg(Gtk.StateType.NORMAL, Gdk.Color.parse("darkred")[1])
         self.crosshair_button.connect("clicked", self.on_crosshair_button, "crosshair button")
-        self.about_button = Gtk.Button("")
-        for child in self.about_button :
-            child.set_label("<b>About</b>")
+
+        self.vbox6.pack_start(hseparator, False, False, 0)
+        self.vbox6.pack_start(self.update_pin_label, False, False, 0)
+        self.vbox6.pack_start(self.update_pin_button, False, False, 0)
+        self.vbox6.pack_start(self.crosshair_button, False, False, 0)
+      
+        self.update_pin_button.connect("clicked", self.on_update_pin_button, "update pins")
+
+        hseparator = Gtk.HSeparator()
+        self.save_label = Gtk.Label("")
+        self.save_label.set_label("<b>Save Library Component</b>")
+        self.save_label.modify_fg(Gtk.StateType.NORMAL, Gdk.Color.parse("darkgreen")[1])
+        self.save_label.set_use_markup(True)
+        #self.save_entry = Gtk.Entry()
+        #self.save_entry.set_visibility(True)
+        #self.save_entry.set_max_length(32)
+        #self.save_entry.set_text("SAVE IC Library")
+        self.save_button = Gtk.Button("")
+        for child in self.save_button :
+            child.set_label("<b>SAVE</b>")
             child.set_use_markup(True)
             child.modify_fg(Gtk.StateType.NORMAL, Gdk.Color.parse("darkred")[1])
-        self.about_button.connect("clicked", self.on_about_button)
-        self.exit_button = Gtk.Button("")
-        for child in self.exit_button :
-            child.set_label("<b>Exit</b>")
-            child.set_use_markup(True)
-            child.modify_fg(Gtk.StateType.NORMAL, Gdk.Color.parse("darkred")[1])
-        self.exit_button.connect("clicked", self.on_exit_button)
+        self.save_button.connect("clicked", self.on_save_button)
 
         self.vbox7.pack_start(hseparator, False, False, 0)
-        self.vbox7.pack_start(self.misc_label, False, False, 0)
-        self.vbox7.pack_start(self.crosshair_button, False, False, 0)
-        self.vbox7.pack_start(self.about_button, False, False, 0)
-        self.vbox7.pack_start(self.exit_button, False, False, 0)
+        self.vbox7.pack_start(self.save_label, False, False, 0)
+        #self.vbox7.pack_start(self.save_entry, False, False, 0)
+        self.vbox7.pack_start(self.save_button, False, False, 0)
 
         self.add(self.vbox)
         self.show_all()
    
+    def on_save_button(self, widget):
+        #self.LIBRARY = str(self.save_entry.get_text())
+        dialog = Gtk.FileChooserDialog("Please choose a kicad file", self,
+            Gtk.FileChooserAction.SAVE,
+            (Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL,
+             Gtk.STOCK_SAVE, Gtk.ResponseType.OK))
+        filter_kicad = Gtk.FileFilter()
+        filter_kicad.set_name("KiCAD library component")
+        filter_kicad.add_pattern("*.lib")
+        dialog.add_filter(filter_kicad)
+        filter_any = Gtk.FileFilter()
+        filter_any.set_name("Any files")
+        filter_any.add_pattern("*")
+        dialog.add_filter(filter_any)
+        response = dialog.run()
+        if response == Gtk.ResponseType.OK:
+           #print("File selected: " + dialog.get_filename())
+           #buf = self.view.get_buffer()
+           #self.RESULT = buf.get_text(buf.get_start_iter(), buf.get_end_iter(), True)
+           kicad_filename = dialog.get_filename()
+           # check file extension. If no file extension add it
+           if ".lib" not in kicad_filename:
+              kicad_filename += ".lib"
+           # check if file with the same filename exists -> Prompt user yes or no to overwrite
+           # Case I: File exists
+           if os.path.exists(kicad_filename) == True:
+              dialog2 = Gtk.MessageDialog(self, 0, Gtk.MessageType.QUESTION,
+                  Gtk.ButtonsType.YES_NO, "The file "+kicad_filename+" exists.\nOverwrite it?")
+              dialog2.format_secondary_text(
+                  "Do you want to overwrite file "+kicad_filename+".")
+              response2 = dialog2.run()
+              # If the user responds NO. Do nothing.
+              if response2 == Gtk.ResponseType.NO:
+                 dialog2.destroy()
+                 dialog.destroy()
+                 return False
+              # If the user responds YES. Overwrite the file.
+              elif response2 == Gtk.ResponseType.YES:
+                 try:
+                     open(kicad_filename, 'w').write(self.RESULT)
+                 except SomeError as err:
+                     print('Could not save %s: %s' % (kicad_filename, err))
+                 dialog2.destroy()
+                 dialog.destroy()
+                 return False
+           # Case II: File doesn't already exist -> create it.
+           try:
+                open(kicad_filename, 'w').write(self.RESULT)
+           except SomeError as err:
+                print('Could not save %s: %s' % (kicad_filename, err))
+        elif response == Gtk.ResponseType.CANCEL:
+                print("Cancel clicked")
+        dialog.destroy()
+        return False
+
+
     def on_ic_dimensions_button(self, widget, data=None):
         self.ic_width = int(self.ic_width_entry.get_text())
         self.ic_length = int(self.ic_length_entry.get_text())
@@ -801,6 +876,9 @@ class UKLCIG(Gtk.Window):
         print("signal received ", signum, frame)
 
     def on_draw(self, wid, cr):
+
+        #intialize self.RESULT each time
+        self.RESULT = ''
 
         self.action_group.get_action("AddPin").set_sensitive(False)
         self.action_group.get_action("RemovePin").set_sensitive(False)
