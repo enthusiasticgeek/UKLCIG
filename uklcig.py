@@ -1174,7 +1174,7 @@ class UKLCIG(Gtk.Window):
         self.RESULT += "F1 \"" + self.ic_name_entry.get_text() + "\" 0 100 50 H V C C" + "\n" 
         self.RESULT += "F2 \"MODULE\" 0 0 50 H I C C" + "\n" 
         self.RESULT += "F3 \"DOCUMENTATION\" 0 0 50 H I C C" + "\n" 
-        self.RESULT += "ALIAS " + self.ic_name_entry.get_text() + "\n"
+        self.RESULT += "#ALIAS " + self.ic_name_entry.get_text() + "\n"
         self.RESULT += "$FPLIST" + "\n"
         self.RESULT += " # Enter all the allowed Foot Prints here - one on each line" + "\n"
         self.RESULT += "$ENDFPLIST" + "\n"
