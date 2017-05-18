@@ -56,6 +56,7 @@ class UKLCIG(Gtk.Window):
 
         self.cur_direction = 0
         self.populate = []
+        self.RESULT = ''
  
         #X, Name, Pin, X, Y,   Length, Orientation, sizenum sizename part dmg_type     Type shape 
         #X  PB11  A1 -750 8300  300       R           10    10        1      1          I   V
@@ -94,11 +95,29 @@ class UKLCIG(Gtk.Window):
         self.END_MOUSE_Y = 0
         self.MOUSE_X = 0
         self.MOUSE_Y = 0
+        self.PIN_X = 0
+        self.PIN_Y = 0
 
-        self.total_pins = 80
         self.ic_width = 200
         self.ic_length = 400
         self.sides = 4
+
+        # Can we populate the total pins along the perimeter?
+        perimeter = 2 * (self.ic_width + self.ic_length)
+
+        # assume pin width = 5 and gap between pins = 5
+        self.max_pins_per_width = self.ic_width / (10)
+        self.max_pins_per_length = self.ic_length / (10)
+
+        # Max pins that can be drawn sanely
+        max_pins = 0
+        if (self.sides == 2):
+            max_pins = 2 * (self.max_pins_per_length)
+        elif (self.sides == 4):
+            max_pins = 2 * (self.max_pins_per_width + self.max_pins_per_length)
+
+        # Max pins requested is less than or equal to pins that may be drawn?
+        self.total_pins = max_pins
 
         self.shape_invisible_pin_flag = False
         self.crosshair = False
@@ -150,21 +169,11 @@ class UKLCIG(Gtk.Window):
         self.ic_length_entry.set_visibility(True)
         self.ic_length_entry.set_max_length(5)
         self.ic_length_entry.set_text(str(self.ic_length))
-        self.ic_pins_label = Gtk.Label("")
-        self.ic_pins_label.set_label("<b>IC Pins</b>")
-        self.ic_pins_label.modify_fg(Gtk.StateType.NORMAL, Gdk.Color.parse("darkgreen")[1])
-        self.ic_pins_label.set_use_markup(True)
-        self.ic_pins_entry = Gtk.Entry()
-        self.ic_pins_entry.set_visibility(True)
-        self.ic_pins_entry.set_max_length(5)
-        self.ic_pins_entry.set_text(str(self.total_pins))
 
         self.vbox1.pack_start(hseparator, False, False, 0)
         self.vbox1.pack_start(self.ic_dimensions_label, False, False, 0)
         self.vbox1.pack_start(self.ic_width_entry, False, False, 0)
         self.vbox1.pack_start(self.ic_length_entry, False, False, 0)
-        self.vbox1.pack_start(self.ic_pins_label, False, False, 0)
-        self.vbox1.pack_start(self.ic_pins_entry, False, False, 0)
 
         hseparator = Gtk.HSeparator()
         self.signal_name_label = Gtk.Label("")
@@ -343,7 +352,6 @@ class UKLCIG(Gtk.Window):
         self.show_all()
 
     def on_update_pin_button(self, widget, data=None):
-        self.total_pins = int(self.ic_pins_entry.get_text())
         self.ic_width = int(self.ic_width_entry.get_text())
         self.ic_length = int(self.ic_length_entry.get_text())
 
@@ -362,10 +370,7 @@ class UKLCIG(Gtk.Window):
             max_pins = 2 * (self.max_pins_per_width + self.max_pins_per_length)
 
         # Max pins requested is less than or equal to pins that may be drawn?
-        if self.total_pins > max_pins:
-            cr.move_to(-self.ic_width/2+10,0) 
-            cr.show_text("Pins count doesn't fit along the IC perimeter. Reduce pins or increase IC dimensions.")
-            return False
+        self.total_pins = max_pins
 
         if self.cur_pin_selected != -1:
            nom = [x for x in self.populate if (x[0] == self.cur_direction and x[1] == self.cur_pin_selected)]
@@ -377,14 +382,16 @@ class UKLCIG(Gtk.Window):
                  if self.populate[i][0] == self.cur_direction and self.populate[i][1] == self.cur_pin_selected:
                     self.populate[i][2] = self.signal_name_entry.get_text()
                     self.populate[i][3] = self.pin_name_entry.get_text()
-                    self.populate[i][4] = 300
-                    self.populate[i][5] = self.Orientation
-                    self.populate[i][6] = 10
-                    self.populate[i][7] = 10
-                    self.populate[i][8] = 1
-                    self.populate[i][9] = 1
-                    self.populate[i][10] = self.Type
-                    self.populate[i][11] = self.Shape
+                    self.populate[i][4] = self.PIN_X
+                    self.populate[i][5] = self.PIN_Y
+                    self.populate[i][6] = 300
+                    self.populate[i][7] = self.Orientation
+                    self.populate[i][8] = 10
+                    self.populate[i][9] = 10
+                    self.populate[i][10] = 1
+                    self.populate[i][11] = 1
+                    self.populate[i][12] = self.Type
+                    self.populate[i][13] = self.Shape
                     self.cur_signal_name_label.set_label("<b>"+str(self.populate[i][2])+"</b>")
                     self.cur_signal_name_label.set_use_markup(True)
                     self.cur_pin_name_label.set_label("<b>"+str(self.populate[i][3])+"</b>")
@@ -399,7 +406,7 @@ class UKLCIG(Gtk.Window):
            else:
                #X, Name, Pin, X, Y,   Length, Orientation, sizenum sizename part dmg_type     Type shape 
                #X  PB11  A1 -750 8300  300       R           10    10        1      1          I   V
-               self.populate.append([self.cur_direction,self.cur_pin_selected,self.signal_name_entry.get_text(),self.pin_name_entry.get_text(), 300, self.Orientation, 10, 10, 1, 1, self.Type, self.Shape])
+               self.populate.append([self.cur_direction,self.cur_pin_selected,self.signal_name_entry.get_text(),self.pin_name_entry.get_text(),self.PIN_X,self.PIN_Y,300,self.Orientation,10,10,1,1,self.Type,self.Shape])
                for i in range( len( self.populate ) ):
                #X, Name, Pin, X, Y,   Length, Orientation, sizenum sizename part dmg_type     Type shape 
                #X  PB11  A1 -750 8300  300       R           10    10        1      1          I   V
@@ -414,7 +421,6 @@ class UKLCIG(Gtk.Window):
                     self.cur_type_label.set_use_markup(True)
                     self.cur_shape_label.set_label("<b>"+str(self.populate[i][11])+"</b>")
                     self.cur_shape_label.set_use_markup(True)
-
                #print data
 
     def on_exit_button(self, widget):
@@ -760,11 +766,7 @@ class UKLCIG(Gtk.Window):
         elif (self.sides == 4):
             max_pins = 2 * (self.max_pins_per_width + self.max_pins_per_length)
 
-        # Max pins requested is less than or equal to pins that may be drawn?
-        if self.total_pins > max_pins:
-            cr.move_to(-self.ic_width/2+10,0) 
-            cr.show_text("Pins count doesn't fit along the IC perimeter. Reduce pins or increase IC dimensions.")
-            return False
+        self.total_pins = max_pins
 
         # Draw markers
 
