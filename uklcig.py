@@ -203,6 +203,7 @@ class UKLCIG(Gtk.Window):
 
         hseparator = Gtk.HSeparator()
         hseparator1 = Gtk.HSeparator()
+        hseparator2 = Gtk.HSeparator()
         self.ic_dimensions_label = Gtk.Label("")
         self.ic_dimensions_label.set_label("<b>IC Dimensions (WxL)</b>")
         self.ic_dimensions_label.modify_fg(Gtk.StateType.NORMAL, Gdk.Color.parse("darkgreen")[1])
@@ -215,6 +216,22 @@ class UKLCIG(Gtk.Window):
         self.ic_length_entry.set_visibility(True)
         self.ic_length_entry.set_max_length(5)
         self.ic_length_entry.set_text(str(self.ic_length))
+        self.pins_distance_label = Gtk.Label("")
+        self.pins_distance_label.set_label("<b>Distance Between Pins</b>")
+        self.pins_distance_label.modify_fg(Gtk.StateType.NORMAL, Gdk.Color.parse("darkgreen")[1])
+        self.pins_distance_label.set_use_markup(True)
+        self.pins_distance_entry = Gtk.Entry()
+        self.pins_distance_entry.set_visibility(True)
+        self.pins_distance_entry.set_max_length(5)
+        self.pins_distance_entry.set_text("5")
+        self.pin_width_label = Gtk.Label("")
+        self.pin_width_label.set_label("<b>Pin Width</b>")
+        self.pin_width_label.modify_fg(Gtk.StateType.NORMAL, Gdk.Color.parse("darkgreen")[1])
+        self.pin_width_label.set_use_markup(True)
+        self.pin_width_entry = Gtk.Entry()
+        self.pin_width_entry.set_visibility(True)
+        self.pin_width_entry.set_max_length(5)
+        self.pin_width_entry.set_text("5")
         self.ic_dimensions_button = Gtk.Button("")
         for child in self.ic_dimensions_button :
             child.set_label("<b>Update IC Dimensions</b>")
@@ -226,6 +243,11 @@ class UKLCIG(Gtk.Window):
         self.vbox1.pack_start(self.ic_dimensions_label, False, False, 0)
         self.vbox1.pack_start(self.ic_width_entry, False, False, 0)
         self.vbox1.pack_start(self.ic_length_entry, False, False, 0)
+        self.vbox1.pack_start(hseparator2, False, False, 0)
+        self.vbox1.pack_start(self.pins_distance_label, False, False, 0)
+        self.vbox1.pack_start(self.pins_distance_entry, False, False, 0)
+        self.vbox1.pack_start(self.pin_width_label, False, False, 0)
+        self.vbox1.pack_start(self.pin_width_entry, False, False, 0)
         self.vbox1.pack_start(hseparator1, False, False, 0)
         self.vbox1.pack_start(self.ic_dimensions_button, False, False, 0)
 
@@ -243,24 +265,25 @@ class UKLCIG(Gtk.Window):
         self.cur_signal_name_label.set_label("<b>N/A</b>")
         self.cur_signal_name_label.modify_fg(Gtk.StateType.NORMAL, Gdk.Color.parse("purple")[1])
         self.cur_signal_name_label.set_use_markup(True)
-        self.pin_length_label = Gtk.Label("")
-        self.pin_length_label.set_label("<b>Pin Length</b>")
-        self.pin_length_label.modify_fg(Gtk.StateType.NORMAL, Gdk.Color.parse("darkgreen")[1])
-        self.pin_length_label.set_use_markup(True)
-        self.pin_length_entry = Gtk.Entry()
-        self.pin_length_entry.set_visibility(True)
-        self.pin_length_entry.set_max_length(5)
-        self.pin_length_entry.set_text("300")
+        self.size_signal_name_label = Gtk.Label("")
+        self.size_signal_name_label.set_label("<b>Signal Text Size</b>")
+        self.size_signal_name_label.modify_fg(Gtk.StateType.NORMAL, Gdk.Color.parse("darkgreen")[1])
+        self.size_signal_name_label.set_use_markup(True)
+        self.size_signal_name_entry = Gtk.Entry()
+        self.size_signal_name_entry.set_visibility(True)
+        self.size_signal_name_entry.set_max_length(5)
+        self.size_signal_name_entry.set_text("10")
 
         self.vbox2.pack_start(hseparator, False, False, 0)
         self.vbox2.pack_start(self.signal_name_label, False, False, 0)
         self.vbox2.pack_start(self.signal_name_entry, False, False, 0)
         self.vbox2.pack_start(self.cur_signal_name_label, False, False, 0)
         self.vbox2.pack_start(hseparator1, False, False, 0)
-        self.vbox2.pack_start(self.pin_length_label, False, False, 0)
-        self.vbox2.pack_start(self.pin_length_entry, False, False, 0)
+        self.vbox2.pack_start(self.size_signal_name_label, False, False, 0)
+        self.vbox2.pack_start(self.size_signal_name_entry, False, False, 0)
 
         hseparator = Gtk.HSeparator()
+        hseparator1 = Gtk.HSeparator()
         self.pin_name_label = Gtk.Label("")
         self.pin_name_label.set_label("<b>Pin Name</b>")
         self.pin_name_label.modify_fg(Gtk.StateType.NORMAL, Gdk.Color.parse("darkgreen")[1])
@@ -269,16 +292,27 @@ class UKLCIG(Gtk.Window):
         self.pin_name_entry.set_visibility(True)
         self.pin_name_entry.set_max_length(32)
         self.pin_name_entry.set_text("Enter Pin Name (e.g. A1)")
-
+        self.pins_distance_label = Gtk.Label("")
         self.cur_pin_name_label = Gtk.Label("")
         self.cur_pin_name_label.set_label("<b>N/A</b>")
         self.cur_pin_name_label.modify_fg(Gtk.StateType.NORMAL, Gdk.Color.parse("purple")[1])
         self.cur_pin_name_label.set_use_markup(True)
+        self.size_pin_name_label = Gtk.Label("")
+        self.size_pin_name_label.set_label("<b>Signal Text Size</b>")
+        self.size_pin_name_label.modify_fg(Gtk.StateType.NORMAL, Gdk.Color.parse("darkgreen")[1])
+        self.size_pin_name_label.set_use_markup(True)
+        self.size_pin_name_entry = Gtk.Entry()
+        self.size_pin_name_entry.set_visibility(True)
+        self.size_pin_name_entry.set_max_length(5)
+        self.size_pin_name_entry.set_text("10")
 
         self.vbox3.pack_start(hseparator, False, False, 0)
         self.vbox3.pack_start(self.pin_name_label, False, False, 0)
         self.vbox3.pack_start(self.pin_name_entry, False, False, 0)
         self.vbox3.pack_start(self.cur_pin_name_label, False, False, 0)
+        self.vbox3.pack_start(hseparator1, False, False, 0)
+        self.vbox3.pack_start(self.size_pin_name_label, False, False, 0)
+        self.vbox3.pack_start(self.size_pin_name_entry, False, False, 0)
 
         #hseparator = Gtk.HSeparator()
         #self.orientation_label = Gtk.Label("")
@@ -309,6 +343,7 @@ class UKLCIG(Gtk.Window):
         #self.vbox3.pack_start(self.cur_orientation_label, False, False, 0)
 
         hseparator = Gtk.HSeparator()
+        hseparator1 = Gtk.HSeparator()
         self.type_label = Gtk.Label("")
         self.type_label.set_label("<b>Type</b>")
         self.type_label.modify_fg(Gtk.StateType.NORMAL, Gdk.Color.parse("darkgreen")[1])
@@ -337,11 +372,22 @@ class UKLCIG(Gtk.Window):
         self.cur_type_label.set_label("<b>N/A</b>")
         self.cur_type_label.modify_fg(Gtk.StateType.NORMAL, Gdk.Color.parse("purple")[1])
         self.cur_type_label.set_use_markup(True)
+        self.pin_length_label = Gtk.Label("")
+        self.pin_length_label.set_label("<b>Pin Length</b>")
+        self.pin_length_label.modify_fg(Gtk.StateType.NORMAL, Gdk.Color.parse("darkgreen")[1])
+        self.pin_length_label.set_use_markup(True)
+        self.pin_length_entry = Gtk.Entry()
+        self.pin_length_entry.set_visibility(True)
+        self.pin_length_entry.set_max_length(5)
+        self.pin_length_entry.set_text("300")
 
         self.vbox4.pack_start(hseparator, False, False, 0)
         self.vbox4.pack_start(self.type_label, False, False, 0)
         self.vbox4.pack_start(self.type_combobox, False, False, 0)
         self.vbox4.pack_start(self.cur_type_label, False, False, 0)
+        self.vbox4.pack_start(hseparator1, False, False, 0)
+        self.vbox4.pack_start(self.pin_length_label, False, False, 0)
+        self.vbox4.pack_start(self.pin_length_entry, False, False, 0)
 
         hseparator = Gtk.HSeparator()
         self.shape_label = Gtk.Label("")
@@ -499,6 +545,8 @@ class UKLCIG(Gtk.Window):
     def on_ic_dimensions_button(self, widget, data=None):
         self.ic_width = int(self.ic_width_entry.get_text())
         self.ic_length = int(self.ic_length_entry.get_text())
+        self.pins_distance = int(self.pins_distance_entry.get_text())
+        self.pin_width = int(self.pin_width_entry.get_text())
 
         # Can we populate the total pins along the perimeter?
         perimeter = 2 * (self.ic_width + self.ic_length)
@@ -522,11 +570,11 @@ class UKLCIG(Gtk.Window):
         # Redo IC dimensions - TODO check if this portion makes sense or is redundant
  
         # If there are spaces then reject
-        if ' ' in (self.signal_name_entry.get_text() or self.pin_name_entry.get_text() or self.pin_length_entry()):
+        if ' ' in (self.signal_name_entry.get_text() or self.pin_name_entry.get_text() or self.pin_length_entry() or self.size_signal_name_entry() or self.size_pin_name_entry()):
            dialog = Gtk.MessageDialog(self, 0, Gtk.MessageType.ERROR,
-                    Gtk.ButtonsType.CANCEL, "Signal or Pin name contain spaces")
+                    Gtk.ButtonsType.CANCEL, "Signal or Pin attributes contain spaces")
            dialog.format_secondary_text(
-                    "Signal or Pin names cannot contain spaces.")
+                    "Signal or Pin attibutes cannot contain spaces.")
            dialog.run()
            dialog.destroy()
            return False
@@ -535,6 +583,8 @@ class UKLCIG(Gtk.Window):
         self.ic_width = int(self.ic_width_entry.get_text())
         self.ic_length = int(self.ic_length_entry.get_text())
         self.pin_length = int(self.pin_length_entry.get_text())
+        self.size_signal_name = int(self.size_signal_name_entry.get_text())
+        self.size_pin_name = int(self.size_pin_name_entry.get_text())
 
         # Can we populate the total pins along the perimeter?
         perimeter = 2 * (self.ic_width + self.ic_length)
