@@ -543,6 +543,44 @@ class UKLCIG(Gtk.Window):
 
 
     def on_ic_dimensions_button(self, widget, data=None):
+
+
+        dialog = Gtk.MessageDialog(self, 0, Gtk.MessageType.WARNING,
+            Gtk.ButtonsType.OK_CANCEL, "This will reset IC parameters")
+        dialog.format_secondary_text(
+            "This will reset the IC parameters. Do you wish to proceed?")
+        response = dialog.run()
+        if response == Gtk.ResponseType.OK:
+
+            #Empty list and initialize variables
+            self.cur_pin_west = 0
+            self.cur_pin_east = 0
+            self.cur_pin_north = 0
+            self.cur_pin_south = 0
+
+            self.pins_west[:] = []
+            self.pins_east[:] = []
+            self.pins_north[:] = []
+            self.pins_south[:] = []
+
+            self.cur_direction = 0
+            self.populate[:] = []
+
+            self.BEGIN_MOUSE_X = 0
+            self.BEGIN_MOUSE_Y = 0
+            self.END_MOUSE_X = 0
+            self.END_MOUSE_Y = 0
+            self.MOUSE_X = 0
+            self.MOUSE_Y = 0
+            self.PIN_X = 0
+            self.PIN_Y = 0
+
+        elif response == Gtk.ResponseType.CANCEL:
+            dialog.destroy()
+            return False
+
+        dialog.destroy()
+
         self.ic_width = int(self.ic_width_entry.get_text())
         self.ic_length = int(self.ic_length_entry.get_text())
         self.pins_distance = int(self.pins_distance_entry.get_text())
@@ -619,8 +657,8 @@ class UKLCIG(Gtk.Window):
                     self.populate[i][7] = self.Orientation
                     self.populate[i][8] = self.size_pin_name
                     self.populate[i][9] = self.size_signal_name
-                    self.populate[i][10] = 1
-                    self.populate[i][11] = 1
+                    self.populate[i][10] = 1 # We will create only one part rather than multiple parts for the same component
+                    self.populate[i][11] = 1 # We will set dmg_type to always 1
                     self.populate[i][12] = self.Type
                     self.populate[i][13] = self.Shape
                     self.cur_signal_name_label.set_label("<b>"+str(self.populate[i][2])+"</b>")
