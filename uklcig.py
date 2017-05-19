@@ -171,7 +171,6 @@ class UKLCIG(Gtk.Window):
 
         hseparator = Gtk.HSeparator()
         hseparator1 = Gtk.HSeparator()
-        hseparator2 = Gtk.HSeparator()
         self.ic_name_label = Gtk.Label("")
         self.ic_name_label.set_label("<b>IC Name</b>")
         self.ic_name_label.modify_fg(Gtk.StateType.NORMAL, Gdk.Color.parse("darkgreen")[1])
@@ -179,31 +178,6 @@ class UKLCIG(Gtk.Window):
         self.ic_name_entry = Gtk.Entry()
         self.ic_name_entry.set_visibility(True)
         self.ic_name_entry.set_max_length(32)
-        self.ic_name_entry.set_text("Enter IC Name")
-        self.about_button = Gtk.Button("")
-        for child in self.about_button :
-            child.set_label("<b>About</b>")
-            child.set_use_markup(True)
-            child.modify_fg(Gtk.StateType.NORMAL, Gdk.Color.parse("darkred")[1])
-        self.about_button.connect("clicked", self.on_about_button)
-        self.exit_button = Gtk.Button("")
-        for child in self.exit_button :
-            child.set_label("<b>Exit</b>")
-            child.set_use_markup(True)
-            child.modify_fg(Gtk.StateType.NORMAL, Gdk.Color.parse("darkred")[1])
-        self.exit_button.connect("clicked", self.on_exit_button)
-
-        self.vbox0.pack_start(hseparator, False, False, 0)
-        self.vbox0.pack_start(self.ic_name_label, False, False, 0)
-        self.vbox0.pack_start(self.ic_name_entry, False, False, 0)
-        self.vbox0.pack_start(hseparator1, False, False, 0)
-        self.vbox0.pack_start(self.about_button, False, False, 0)
-        self.vbox0.pack_start(hseparator2, False, False, 0)
-        self.vbox0.pack_start(self.exit_button, False, False, 0)
-
-        hseparator = Gtk.HSeparator()
-        hseparator1 = Gtk.HSeparator()
-        hseparator2 = Gtk.HSeparator()
         self.ic_dimensions_label = Gtk.Label("")
         self.ic_dimensions_label.set_label("<b>IC Dimensions (WxL)</b>")
         self.ic_dimensions_label.modify_fg(Gtk.StateType.NORMAL, Gdk.Color.parse("darkgreen")[1])
@@ -216,6 +190,17 @@ class UKLCIG(Gtk.Window):
         self.ic_length_entry.set_visibility(True)
         self.ic_length_entry.set_max_length(5)
         self.ic_length_entry.set_text(str(self.ic_length))
+
+        self.vbox0.pack_start(hseparator, False, False, 0)
+        self.vbox0.pack_start(self.ic_name_label, False, False, 0)
+        self.vbox0.pack_start(self.ic_name_entry, False, False, 0)
+        self.vbox0.pack_start(hseparator1, False, False, 0)
+        self.vbox0.pack_start(self.ic_dimensions_label, False, False, 0)
+        self.vbox0.pack_start(self.ic_width_entry, False, False, 0)
+        self.vbox0.pack_start(self.ic_length_entry, False, False, 0)
+
+        hseparator = Gtk.HSeparator()
+        hseparator1 = Gtk.HSeparator()
         self.pins_distance_label = Gtk.Label("")
         self.pins_distance_label.set_label("<b>Distance Between Pins</b>")
         self.pins_distance_label.modify_fg(Gtk.StateType.NORMAL, Gdk.Color.parse("darkgreen")[1])
@@ -240,10 +225,6 @@ class UKLCIG(Gtk.Window):
         self.ic_dimensions_button.connect("clicked", self.on_ic_dimensions_button, "ic dimensions update button")
 
         self.vbox1.pack_start(hseparator, False, False, 0)
-        self.vbox1.pack_start(self.ic_dimensions_label, False, False, 0)
-        self.vbox1.pack_start(self.ic_width_entry, False, False, 0)
-        self.vbox1.pack_start(self.ic_length_entry, False, False, 0)
-        self.vbox1.pack_start(hseparator2, False, False, 0)
         self.vbox1.pack_start(self.pins_distance_label, False, False, 0)
         self.vbox1.pack_start(self.pins_distance_entry, False, False, 0)
         self.vbox1.pack_start(self.pin_width_label, False, False, 0)
@@ -432,9 +413,13 @@ class UKLCIG(Gtk.Window):
         self.update_pin_label.set_label("<b>Update Pin</b>")
         self.update_pin_label.modify_fg(Gtk.StateType.NORMAL, Gdk.Color.parse("red")[1])
         self.update_pin_label.set_use_markup(True)
+        self.update_inst_label = Gtk.Label("")
+        self.update_inst_label.set_label("<b>1.Right click any IC boundary unit marker\n2.Click 'AddPin'\n3.Double click to select added pin\n4.Click the button below</b>")
+        self.update_inst_label.modify_fg(Gtk.StateType.NORMAL, Gdk.Color.parse("blue")[1])
+        self.update_inst_label.set_use_markup(True)
         self.update_pin_button = Gtk.Button("")
         for child in self.update_pin_button :
-            child.set_label("<b>Update Pin</b>")
+            child.set_label("<b>Update Pin Attributes</b>")
             child.set_use_markup(True)
             child.modify_fg(Gtk.StateType.NORMAL, Gdk.Color.parse("darkred")[1])
         self.crosshair_button = Gtk.CheckButton("")
@@ -446,12 +431,15 @@ class UKLCIG(Gtk.Window):
 
         self.vbox6.pack_start(hseparator, False, False, 0)
         self.vbox6.pack_start(self.update_pin_label, False, False, 0)
+        self.vbox6.pack_start(self.update_inst_label, False, False, 0)
         self.vbox6.pack_start(self.update_pin_button, False, False, 0)
         self.vbox6.pack_start(self.crosshair_button, False, False, 0)
       
         self.update_pin_button.connect("clicked", self.on_update_pin_button, "update pins")
 
         hseparator = Gtk.HSeparator()
+        hseparator1 = Gtk.HSeparator()
+        hseparator2 = Gtk.HSeparator()
         self.save_label = Gtk.Label("")
         self.save_label.set_label("<b>Save Library Component</b>")
         self.save_label.modify_fg(Gtk.StateType.NORMAL, Gdk.Color.parse("darkgreen")[1])
@@ -466,11 +454,27 @@ class UKLCIG(Gtk.Window):
             child.set_use_markup(True)
             child.modify_fg(Gtk.StateType.NORMAL, Gdk.Color.parse("darkred")[1])
         self.save_button.connect("clicked", self.on_save_button)
+        self.ic_name_entry.set_text("Enter IC Name")
+        self.about_button = Gtk.Button("")
+        for child in self.about_button :
+            child.set_label("<b>About</b>")
+            child.set_use_markup(True)
+            child.modify_fg(Gtk.StateType.NORMAL, Gdk.Color.parse("darkred")[1])
+        self.about_button.connect("clicked", self.on_about_button)
+        self.exit_button = Gtk.Button("")
+        for child in self.exit_button :
+            child.set_label("<b>Exit</b>")
+            child.set_use_markup(True)
+            child.modify_fg(Gtk.StateType.NORMAL, Gdk.Color.parse("darkred")[1])
+        self.exit_button.connect("clicked", self.on_exit_button)
 
         self.vbox7.pack_start(hseparator, False, False, 0)
         self.vbox7.pack_start(self.save_label, False, False, 0)
-        #self.vbox7.pack_start(self.save_entry, False, False, 0)
         self.vbox7.pack_start(self.save_button, False, False, 0)
+        self.vbox7.pack_start(hseparator1, False, False, 0)
+        self.vbox7.pack_start(self.about_button, False, False, 0)
+        self.vbox7.pack_start(hseparator2, False, False, 0)
+        self.vbox7.pack_start(self.exit_button, False, False, 0)
 
         self.add(self.vbox)
         self.show_all()
@@ -581,6 +585,17 @@ class UKLCIG(Gtk.Window):
 
         dialog.destroy()
 
+        # Verify if text boxes are numbers
+        if self.ic_width_entry.get_text().isdigit()==False or self.ic_length_entry.get_text().isdigit()==False or self.pins_distance_entry.get_text().isdigit()==False or self.pin_width_entry.get_text().isdigit()==False:
+           dialog = Gtk.MessageDialog(self, 0, Gtk.MessageType.ERROR,
+                    Gtk.ButtonsType.CANCEL, "One or more Signal or Pin attributes not a valid number")
+           dialog.format_secondary_text(
+                    "Signal or Pin attibutes (other than names) should all be numeric.")
+           dialog.run()
+           dialog.destroy()
+           return False
+
+
         self.ic_width = int(self.ic_width_entry.get_text())
         self.ic_length = int(self.ic_length_entry.get_text())
         self.pins_distance = int(self.pins_distance_entry.get_text())
@@ -608,11 +623,21 @@ class UKLCIG(Gtk.Window):
         # Redo IC dimensions - TODO check if this portion makes sense or is redundant
  
         # If there are spaces then reject
-        if ' ' in (self.signal_name_entry.get_text() or self.pin_name_entry.get_text() or self.pin_length_entry() or self.size_signal_name_entry() or self.size_pin_name_entry()):
+        if ' ' in (self.signal_name_entry.get_text() or self.pin_name_entry.get_text() or self.pin_length_entry.get_text() or self.size_signal_name_entry.get_text() or self.size_pin_name_entry.get_text()):
            dialog = Gtk.MessageDialog(self, 0, Gtk.MessageType.ERROR,
                     Gtk.ButtonsType.CANCEL, "Signal or Pin attributes contain spaces")
            dialog.format_secondary_text(
                     "Signal or Pin attibutes cannot contain spaces.")
+           dialog.run()
+           dialog.destroy()
+           return False
+
+        # Verify if text boxes are numbers
+        if self.ic_width_entry.get_text().isdigit()==False or self.ic_length_entry.get_text().isdigit()==False or self.pin_length_entry.get_text().isdigit()==False or self.size_signal_name_entry.get_text().isdigit()==False or self.size_pin_name_entry.get_text().isdigit()==False:
+           dialog = Gtk.MessageDialog(self, 0, Gtk.MessageType.ERROR,
+                    Gtk.ButtonsType.CANCEL, "One or more Signal or Pin attributes not a valid number")
+           dialog.format_secondary_text(
+                    "Signal or Pin attibutes (other than names) should all be numeric.")
            dialog.run()
            dialog.destroy()
            return False
