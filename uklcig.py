@@ -64,6 +64,10 @@ class UKLCIG(Gtk.Window):
         self.populate = []
         self.RESULT = ''
         self.pin_length = 300
+        self.pins_distance = 5
+        self.pin_width = 5
+        self.size_signal_name = 10
+        self.size_pin_name = 10
  
         #X, Name, Pin, X, Y,   Length, Orientation, sizenum sizename part dmg_type     Type shape 
         #X  PB11  A1 -750 8300  300       R           10    10        1      1          I   V
@@ -113,8 +117,8 @@ class UKLCIG(Gtk.Window):
         perimeter = 2 * (self.ic_width + self.ic_length)
 
         # assume pin width = 5 and gap between pins = 5
-        self.max_pins_per_width = self.ic_width / (10)
-        self.max_pins_per_length = self.ic_length / (10)
+        self.max_pins_per_width = self.ic_width / (self.pin_width+self.pins_distance)
+        self.max_pins_per_length = self.ic_length / (self.pin_width+self.pins_distance)
 
         # Max pins that can be drawn sanely
         max_pins = 0
@@ -500,8 +504,8 @@ class UKLCIG(Gtk.Window):
         perimeter = 2 * (self.ic_width + self.ic_length)
 
         # assume pin width = 5 and gap between pins = 5
-        self.max_pins_per_width = self.ic_width / (10)
-        self.max_pins_per_length = self.ic_length / (10)
+        self.max_pins_per_width = self.ic_width / (self.pin_width+self.pins_distance)
+        self.max_pins_per_length = self.ic_length / (self.pin_width+self.pins_distance)
 
         # Max pins that can be drawn sanely
         max_pins = 0
@@ -536,8 +540,8 @@ class UKLCIG(Gtk.Window):
         perimeter = 2 * (self.ic_width + self.ic_length)
 
         # assume pin width = 5 and gap between pins = 5
-        self.max_pins_per_width = self.ic_width / (10)
-        self.max_pins_per_length = self.ic_length / (10)
+        self.max_pins_per_width = self.ic_width / (self.pin_width+self.pins_distance)
+        self.max_pins_per_length = self.ic_length / (self.pin_width+self.pins_distance)
 
         # Max pins that can be drawn sanely
         max_pins = 0
@@ -563,8 +567,8 @@ class UKLCIG(Gtk.Window):
                     self.populate[i][5] = self.PIN_Y
                     self.populate[i][6] = self.pin_length
                     self.populate[i][7] = self.Orientation
-                    self.populate[i][8] = 10
-                    self.populate[i][9] = 10
+                    self.populate[i][8] = self.size_pin_name
+                    self.populate[i][9] = self.size_signal_name
                     self.populate[i][10] = 1
                     self.populate[i][11] = 1
                     self.populate[i][12] = self.Type
@@ -583,7 +587,7 @@ class UKLCIG(Gtk.Window):
            else:
                #X, Name, Pin, X, Y,   Length, Orientation, sizenum sizename part dmg_type     Type shape 
                #X  PB11  A1 -750 8300  300       R           10    10        1      1          I   V
-               self.populate.append([self.cur_direction,self.cur_pin_selected,self.signal_name_entry.get_text(),self.pin_name_entry.get_text(),self.PIN_X,self.PIN_Y,self.pin_length,self.Orientation,10,10,1,1,self.Type,self.Shape])
+               self.populate.append([self.cur_direction,self.cur_pin_selected,self.signal_name_entry.get_text(),self.pin_name_entry.get_text(),self.PIN_X,self.PIN_Y,self.pin_length,self.Orientation,self.size_pin_name,self.size_signal_name,1,1,self.Type,self.Shape])
                for i in range( len( self.populate ) ):
                #X, Name, Pin, X, Y,   Length, Orientation, sizenum sizename part dmg_type     Type shape 
                #X  PB11  A1 -750 8300  300       R           10    10        1      1          I   V
@@ -710,7 +714,7 @@ class UKLCIG(Gtk.Window):
         w = self.darea.get_allocation().width
         h = self.darea.get_allocation().height
 
-        if (self.MOUSE_X-w/2) >= -self.ic_width/2-10 and (self.MOUSE_X-w/2) < -self.ic_width/2-10+10 and (self.MOUSE_Y-h/2) >= -self.ic_length/2+0*10+5 and (self.MOUSE_Y-h/2) < -self.ic_length/2+self.max_pins_per_length*10+5+5:
+        if (self.MOUSE_X-w/2) >= -self.ic_width/2-10 and (self.MOUSE_X-w/2) < -self.ic_width/2-10+10 and (self.MOUSE_Y-h/2) >= -self.ic_length/2+0*(self.pin_width+self.pins_distance)+5 and (self.MOUSE_Y-h/2) < -self.ic_length/2+self.max_pins_per_length*(self.pin_width+self.pins_distance)+5+5:
           #print "West " + str(self.cur_pin_west)       
           if self.cur_pin_west not in self.pins_west:
              if widget.get_name() == 'AddPin':
@@ -721,7 +725,7 @@ class UKLCIG(Gtk.Window):
                 #Also remove from the populate list
                 self.populate = [x for x in self.populate if not (x[0] == Directions.WEST and x[1] == self.cur_pin_west) ]
 
-        if (self.MOUSE_X-w/2) >= self.ic_width/2 and (self.MOUSE_X-w/2) < self.ic_width/2+10+10 and (self.MOUSE_Y-h/2) >= -self.ic_length/2+0*10+5 and (self.MOUSE_Y-h/2) < -self.ic_length/2+self.max_pins_per_length*10+5+5:
+        if (self.MOUSE_X-w/2) >= self.ic_width/2 and (self.MOUSE_X-w/2) < self.ic_width/2+10+10 and (self.MOUSE_Y-h/2) >= -self.ic_length/2+0*(self.pin_width+self.pins_distance)+5 and (self.MOUSE_Y-h/2) < -self.ic_length/2+self.max_pins_per_length*(self.pin_width+self.pins_distance)+5+5:
           #print "East " + str(self.cur_pin_east)
           if self.cur_pin_east not in self.pins_east:
              if widget.get_name() == 'AddPin':
@@ -732,7 +736,7 @@ class UKLCIG(Gtk.Window):
                 #Also remove from the populate list
                 self.populate = [x for x in self.populate if not (x[0] == Directions.EAST and x[1] == self.cur_pin_east) ]
 
-        if (self.MOUSE_X-w/2) >= -self.ic_width/2+0*10+5 and (self.MOUSE_X-w/2) < -self.ic_width/2+self.max_pins_per_width*10+5+5 and (self.MOUSE_Y-h/2) >= -self.ic_length/2-10-10 and (self.MOUSE_Y-h/2) < -self.ic_length/2-10+10:
+        if (self.MOUSE_X-w/2) >= -self.ic_width/2+0*(self.pin_width+self.pins_distance)+5 and (self.MOUSE_X-w/2) < -self.ic_width/2+self.max_pins_per_width*(self.pin_width+self.pins_distance)+5+5 and (self.MOUSE_Y-h/2) >= -self.ic_length/2-10-10 and (self.MOUSE_Y-h/2) < -self.ic_length/2-10+10:
           #print "North " + str(self.cur_pin_north)
           if self.cur_pin_north not in self.pins_north:
              if widget.get_name() == 'AddPin':
@@ -743,7 +747,7 @@ class UKLCIG(Gtk.Window):
                 #Also remove from the populate list
                 self.populate = [x for x in self.populate if not (x[0] == Directions.NORTH and x[1] == self.cur_pin_north) ]
 
-        if (self.MOUSE_X-w/2) >= -self.ic_width/2+0*10+5 and (self.MOUSE_X-w/2) < -self.ic_width/2+self.max_pins_per_width*10+5+5 and (self.MOUSE_Y-h/2) >= self.ic_length/2-10 and (self.MOUSE_Y-h/2) < self.ic_length/2+20:
+        if (self.MOUSE_X-w/2) >= -self.ic_width/2+0*(self.pin_width+self.pins_distance)+5 and (self.MOUSE_X-w/2) < -self.ic_width/2+self.max_pins_per_width*(self.pin_width+self.pins_distance)+5+5 and (self.MOUSE_Y-h/2) >= self.ic_length/2-10 and (self.MOUSE_Y-h/2) < self.ic_length/2+20:
           #print "South " + str(self.cur_pin_south)
           if self.cur_pin_south not in self.pins_south:
              if widget.get_name() == 'AddPin':
@@ -782,7 +786,7 @@ class UKLCIG(Gtk.Window):
            h = self.darea.get_allocation().height
            direction = ''
    
-           if (self.MOUSE_X-w/2) >= -self.ic_width/2-10 and (self.MOUSE_X-w/2) < -self.ic_width/2-10+10 and (self.MOUSE_Y-h/2) >= -self.ic_length/2+0*10+5 and (self.MOUSE_Y-h/2) < -self.ic_length/2+self.max_pins_per_length*10+5+5:
+           if (self.MOUSE_X-w/2) >= -self.ic_width/2-10 and (self.MOUSE_X-w/2) < -self.ic_width/2-10+10 and (self.MOUSE_Y-h/2) >= -self.ic_length/2+0*(self.pin_width+self.pins_distance)+5 and (self.MOUSE_Y-h/2) < -self.ic_length/2+self.max_pins_per_length*(self.pin_width+self.pins_distance)+5+5:
              #print "West " + str(self.cur_pin_west)       
              direction = 'West'
              if self.cur_pin_west not in self.pins_west:
@@ -797,7 +801,7 @@ class UKLCIG(Gtk.Window):
                 self.update_pin_label.set_use_markup(True) 
                 #assign pin coordinates
                 self.PIN_X = -(self.ic_width/2+self.pin_length)
-                self.PIN_Y = -self.ic_length/2+self.cur_pin_selected*10+5
+                self.PIN_Y = -self.ic_length/2+self.cur_pin_selected*(self.pin_width+self.pins_distance)+5
                 nom = [x for x in self.populate if(x[0]==Directions.WEST and x[1]==self.cur_pin_selected)]
                 if nom:
                    self.cur_signal_name_label.set_label("<b>"+str(nom[0][2])+"</b>")
@@ -811,7 +815,7 @@ class UKLCIG(Gtk.Window):
                    self.cur_shape_label.set_label("<b>"+str(nom[0][13])+"</b>")
                    self.cur_shape_label.set_use_markup(True)
 
-           if (self.MOUSE_X-w/2) >= self.ic_width/2 and (self.MOUSE_X-w/2) < self.ic_width/2+10+10 and (self.MOUSE_Y-h/2) >= -self.ic_length/2+0*10+5 and (self.MOUSE_Y-h/2) < -self.ic_length/2+self.max_pins_per_length*10+5+5:
+           if (self.MOUSE_X-w/2) >= self.ic_width/2 and (self.MOUSE_X-w/2) < self.ic_width/2+10+10 and (self.MOUSE_Y-h/2) >= -self.ic_length/2+0*(self.pin_width+self.pins_distance)+5 and (self.MOUSE_Y-h/2) < -self.ic_length/2+self.max_pins_per_length*(self.pin_width+self.pins_distance)+5+5:
              #print "East " + str(self.cur_pin_east)
              direction = 'East'
              if self.cur_pin_east not in self.pins_east:
@@ -826,7 +830,7 @@ class UKLCIG(Gtk.Window):
                 self.update_pin_label.set_use_markup(True) 
                 #assign pin coordinates
                 self.PIN_X = self.ic_width/2+self.pin_length
-                self.PIN_Y = -self.ic_length/2+self.cur_pin_selected*10+5
+                self.PIN_Y = -self.ic_length/2+self.cur_pin_selected*(self.pin_width+self.pins_distance)+5
                 nom = [x for x in self.populate if(x[0]==Directions.EAST and x[1]==self.cur_pin_selected)]
                 if nom:
                    self.cur_signal_name_label.set_label("<b>"+str(nom[0][2])+"</b>")
@@ -840,7 +844,7 @@ class UKLCIG(Gtk.Window):
                    self.cur_shape_label.set_label("<b>"+str(nom[0][13])+"</b>")
                    self.cur_shape_label.set_use_markup(True)
 
-           if (self.MOUSE_X-w/2) >= -self.ic_width/2+0*10+5 and (self.MOUSE_X-w/2) < -self.ic_width/2+self.max_pins_per_width*10+5+5 and (self.MOUSE_Y-h/2) >= -self.ic_length/2-10-10 and (self.MOUSE_Y-h/2) < -self.ic_length/2-10+10:
+           if (self.MOUSE_X-w/2) >= -self.ic_width/2+0*(self.pin_width+self.pins_distance)+5 and (self.MOUSE_X-w/2) < -self.ic_width/2+self.max_pins_per_width*(self.pin_width+self.pins_distance)+5+5 and (self.MOUSE_Y-h/2) >= -self.ic_length/2-10-10 and (self.MOUSE_Y-h/2) < -self.ic_length/2-10+10:
              direction = 'North'
              #print "North " + str(self.cur_pin_north)
              if self.cur_pin_north not in self.pins_north:
@@ -854,7 +858,7 @@ class UKLCIG(Gtk.Window):
                 self.update_pin_label.set_label("<b>NORTH "+str(self.cur_pin_selected)+"</b>")
                 self.update_pin_label.set_use_markup(True) 
                 #assign pin coordinates
-                self.PIN_X = -self.ic_width/2+self.cur_pin_selected*10+5
+                self.PIN_X = -self.ic_width/2+self.cur_pin_selected*(self.pin_width+self.pins_distance)+5
                 self.PIN_Y = self.ic_length/2+self.pin_length
                 nom = [x for x in self.populate if(x[0]==Directions.NORTH and x[1]==self.cur_pin_selected)]
                 if nom:
@@ -869,7 +873,7 @@ class UKLCIG(Gtk.Window):
                    self.cur_shape_label.set_label("<b>"+str(nom[0][13])+"</b>")
                    self.cur_shape_label.set_use_markup(True)
 
-           if (self.MOUSE_X-w/2) >= -self.ic_width/2+0*10+5 and (self.MOUSE_X-w/2) < -self.ic_width/2+self.max_pins_per_width*10+5+5 and (self.MOUSE_Y-h/2) >= self.ic_length/2-10 and (self.MOUSE_Y-h/2) < self.ic_length/2+20:
+           if (self.MOUSE_X-w/2) >= -self.ic_width/2+0*(self.pin_width+self.pins_distance)+5 and (self.MOUSE_X-w/2) < -self.ic_width/2+self.max_pins_per_width*(self.pin_width+self.pins_distance)+5+5 and (self.MOUSE_Y-h/2) >= self.ic_length/2-10 and (self.MOUSE_Y-h/2) < self.ic_length/2+20:
              #print "South " + str(self.cur_pin_south)
              direction = 'South'
              if self.cur_pin_south not in self.pins_south:
@@ -883,7 +887,7 @@ class UKLCIG(Gtk.Window):
                 self.update_pin_label.set_label("<b>SOUTH "+str(self.cur_pin_selected)+"</b>")
                 self.update_pin_label.set_use_markup(True) 
                 #assign pin coordinates
-                self.PIN_X = -self.ic_width/2+self.cur_pin_selected*10+5
+                self.PIN_X = -self.ic_width/2+self.cur_pin_selected*(self.pin_width+self.pins_distance)+5
                 self.PIN_Y = -(self.ic_length/2+self.pin_length)
                 nom = [x for x in self.populate if(x[0]==Directions.SOUTH and x[1]==self.cur_pin_selected)]
                 if nom:
@@ -951,8 +955,8 @@ class UKLCIG(Gtk.Window):
         perimeter = 2 * (self.ic_width + self.ic_length)
 
         # assume pin width = 5 and gap between pins = 5
-        self.max_pins_per_width = self.ic_width / (10)
-        self.max_pins_per_length = self.ic_length / (10)
+        self.max_pins_per_width = self.ic_width / (self.pin_width+self.pins_distance)
+        self.max_pins_per_length = self.ic_length / (self.pin_width+self.pins_distance)
 
         # Max pins that can be drawn sanely
         max_pins = 0
@@ -967,14 +971,14 @@ class UKLCIG(Gtk.Window):
 
         # Markers on West
         for i in range(self.max_pins_per_length):
-            if (self.MOUSE_X-w/2) >= -self.ic_width/2-10 and (self.MOUSE_X-w/2) < -self.ic_width/2-10+10 and (self.MOUSE_Y-h/2) >= -self.ic_length/2+i*10+5 and (self.MOUSE_Y-h/2) < -self.ic_length/2+i*10+5+5:
+            if (self.MOUSE_X-w/2) >= -self.ic_width/2-10 and (self.MOUSE_X-w/2) < -self.ic_width/2-10+10 and (self.MOUSE_Y-h/2) >= -self.ic_length/2+i*(self.pin_width+self.pins_distance)+5 and (self.MOUSE_Y-h/2) < -self.ic_length/2+i*(self.pin_width+self.pins_distance)+5+5:
                 self.cur_pin_west = i       
                 cr.set_source_rgb(0.5, 0.2, 0.7)
                 #Highlight selected pin in blue
                 if self.cur_pin_selected == i and self.cur_direction == Directions.WEST:
                    cr.set_source_rgb(0.0, 0.0, 1.0)
                    cr.show_text("Selected Pin [West] "+str(i))
-                cr.move_to(-self.ic_width/2-10-40, -self.ic_length/2+i*10+5)
+                cr.move_to(-self.ic_width/2-10-40, -self.ic_length/2+i*(self.pin_width+self.pins_distance)+5)
                 cr.show_text("West "+str(i))
                 # Now show the options to add pin or remove pin
                 if i in self.pins_west:
@@ -985,39 +989,39 @@ class UKLCIG(Gtk.Window):
                    self.action_group.get_action("RemovePin").set_sensitive(False)
             else:
                 cr.set_source_rgb(1, 0.3, 0.9)
-            cr.rectangle(-self.ic_width/2-10 , -self.ic_length/2+i*10+5, 10, 1)
+            cr.rectangle(-self.ic_width/2-10 , -self.ic_length/2+i*(self.pin_width+self.pins_distance)+5, 10, 1)
             cr.fill()   
         for i in range(len(self.pins_west)):
             #print self.pins_west[i]
-            cr.rectangle(-self.ic_width/2-20 , -self.ic_length/2+self.pins_west[i]*10+5, 20, 1)
+            cr.rectangle(-self.ic_width/2-20 , -self.ic_length/2+self.pins_west[i]*(self.pin_width+self.pins_distance)+5, 20, 1)
             cr.fill()   
             nom = [x for x in self.populate if(x[0]==Directions.WEST and x[1]==self.pins_west[i])]
             # naming outside IC border
             if not nom:
-               cr.move_to(-self.ic_width/2-20-80 , -self.ic_length/2+self.pins_west[i]*10+5)
+               cr.move_to(-self.ic_width/2-20-80 , -self.ic_length/2+self.pins_west[i]*(self.pin_width+self.pins_distance)+5)
                cr.show_text("West OUT"+str(self.pins_west[i]))
             else:
-               cr.move_to(-self.ic_width/2-len(nom[0][2])*5 , -self.ic_length/2+self.pins_west[i]*10+5)
+               cr.move_to(-self.ic_width/2-len(nom[0][2])*5 , -self.ic_length/2+self.pins_west[i]*(self.pin_width+self.pins_distance)+5)
                cr.show_text(str(nom[0][2]))
             # naming inside IC border
             if not nom:
-               cr.move_to(-self.ic_width/2-20+20+5 , -self.ic_length/2+self.pins_west[i]*10+5)
+               cr.move_to(-self.ic_width/2-20+20+5 , -self.ic_length/2+self.pins_west[i]*(self.pin_width+self.pins_distance)+5)
                cr.show_text("West IN"+str(self.pins_west[i]))
             else:
-               cr.move_to(-self.ic_width/2+5 , -self.ic_length/2+self.pins_west[i]*10+5)
+               cr.move_to(-self.ic_width/2+5 , -self.ic_length/2+self.pins_west[i]*(self.pin_width+self.pins_distance)+5)
                cr.show_text(str(nom[0][3]))
                
 
         # Markers on East
         for i in range(self.max_pins_per_length):
-            if (self.MOUSE_X-w/2) >= self.ic_width/2 and (self.MOUSE_X-w/2) < self.ic_width/2+10+10 and (self.MOUSE_Y-h/2) >= -self.ic_length/2+i*10+5 and (self.MOUSE_Y-h/2) < -self.ic_length/2+i*10+5+5:
+            if (self.MOUSE_X-w/2) >= self.ic_width/2 and (self.MOUSE_X-w/2) < self.ic_width/2+10+10 and (self.MOUSE_Y-h/2) >= -self.ic_length/2+i*(self.pin_width+self.pins_distance)+5 and (self.MOUSE_Y-h/2) < -self.ic_length/2+i*(self.pin_width+self.pins_distance)+5+5:
                 self.cur_pin_east = i       
                 cr.set_source_rgb(0.5, 0.2, 0.7)
                 #Highlight selected pin in blue
                 if self.cur_pin_selected == i and self.cur_direction == Directions.EAST:
                    cr.set_source_rgb(0.0, 0.0, 1.0)
                    cr.show_text("Selected Pin [East] "+str(i))
-                cr.move_to(self.ic_width/2-10+40, -self.ic_length/2+i*10+5)
+                cr.move_to(self.ic_width/2-10+40, -self.ic_length/2+i*(self.pin_width+self.pins_distance)+5)
                 cr.show_text("East "+str(i))
                 # Now show the options to add pin or remove pin
                 if i in self.pins_east:
@@ -1028,38 +1032,38 @@ class UKLCIG(Gtk.Window):
                    self.action_group.get_action("RemovePin").set_sensitive(False)
             else:
                 cr.set_source_rgb(1, 0.3, 0.9)
-            cr.rectangle(self.ic_width/2 , -self.ic_length/2+i*10+5, 10, 1)
+            cr.rectangle(self.ic_width/2 , -self.ic_length/2+i*(self.pin_width+self.pins_distance)+5, 10, 1)
             cr.fill()   
         for i in range(len(self.pins_east)):
             #print self.pins_east[i]
-            cr.rectangle(self.ic_width/2 , -self.ic_length/2+self.pins_east[i]*10+5, 20, 1)
+            cr.rectangle(self.ic_width/2 , -self.ic_length/2+self.pins_east[i]*(self.pin_width+self.pins_distance)+5, 20, 1)
             cr.fill()   
             nom = [x for x in self.populate if(x[0]==Directions.EAST and x[1]==self.pins_east[i])]
             # naming outside IC border
             if not nom:
-               cr.move_to(self.ic_width/2+40 , -self.ic_length/2+self.pins_east[i]*10+5)
+               cr.move_to(self.ic_width/2+40 , -self.ic_length/2+self.pins_east[i]*(self.pin_width+self.pins_distance)+5)
                cr.show_text("East OUT"+str(self.pins_east[i]))
             else:
-               cr.move_to(self.ic_width/2+5 , -self.ic_length/2+self.pins_east[i]*10+5)
+               cr.move_to(self.ic_width/2+5 , -self.ic_length/2+self.pins_east[i]*(self.pin_width+self.pins_distance)+5)
                cr.show_text(str(nom[0][2]))
             # naming inside IC border
             if not nom:
-               cr.move_to(self.ic_width/2-40 , -self.ic_length/2+self.pins_east[i]*10+5)
+               cr.move_to(self.ic_width/2-40 , -self.ic_length/2+self.pins_east[i]*(self.pin_width+self.pins_distance)+5)
                cr.show_text("East IN "+str(self.pins_east[i]))
             else:
-               cr.move_to(self.ic_width/2-len(nom[0][3])*5 , -self.ic_length/2+self.pins_east[i]*10+5)
+               cr.move_to(self.ic_width/2-len(nom[0][3])*5 , -self.ic_length/2+self.pins_east[i]*(self.pin_width+self.pins_distance)+5)
                cr.show_text(str(nom[0][3]))
 
         # Markers on North
         for i in range(self.max_pins_per_width):
-            if (self.MOUSE_X-w/2) >= -self.ic_width/2+i*10+5 and (self.MOUSE_X-w/2) < -self.ic_width/2+i*10+5+5 and (self.MOUSE_Y-h/2) >= -self.ic_length/2-10-10 and (self.MOUSE_Y-h/2) < -self.ic_length/2-10+10:
+            if (self.MOUSE_X-w/2) >= -self.ic_width/2+i*(self.pin_width+self.pins_distance)+5 and (self.MOUSE_X-w/2) < -self.ic_width/2+i*(self.pin_width+self.pins_distance)+5+5 and (self.MOUSE_Y-h/2) >= -self.ic_length/2-10-10 and (self.MOUSE_Y-h/2) < -self.ic_length/2-10+10:
                 self.cur_pin_north = i       
                 cr.set_source_rgb(0.5, 0.2, 0.7)
                 #Highlight selected pin in blue
                 if self.cur_pin_selected == i and self.cur_direction == Directions.NORTH:
                    cr.set_source_rgb(0.0, 0.0, 1.0)
                    cr.show_text("Selected Pin [North] "+str(i))
-                cr.move_to(-self.ic_width/2+i*10+5, -self.ic_length/2-10-20)
+                cr.move_to(-self.ic_width/2+i*(self.pin_width+self.pins_distance)+5, -self.ic_length/2-10-20)
                 #show vertical text
                 cr.rotate(-math.pi/2)
                 cr.show_text("North "+str(i))
@@ -1073,35 +1077,35 @@ class UKLCIG(Gtk.Window):
                    self.action_group.get_action("RemovePin").set_sensitive(False)
             else:
                 cr.set_source_rgb(1, 0.3, 0.9)
-            cr.rectangle(-self.ic_width/2+i*10+5 , -self.ic_length/2-10, 1, 10)
+            cr.rectangle(-self.ic_width/2+i*(self.pin_width+self.pins_distance)+5 , -self.ic_length/2-10, 1, 10)
             cr.fill()   
         for i in range(len(self.pins_north)):
             #print self.pins_north[i]
-            cr.rectangle(-self.ic_width/2+self.pins_north[i]*10+5 , -self.ic_length/2-10-20, 1, 20)
+            cr.rectangle(-self.ic_width/2+self.pins_north[i]*(self.pin_width+self.pins_distance)+5 , -self.ic_length/2-10-20, 1, 20)
             cr.fill()   
             nom = [x for x in self.populate if(x[0]==Directions.NORTH and x[1]==self.pins_north[i])]
             # naming outside IC border
             if not nom:
-               cr.move_to(-self.ic_width/2+self.pins_north[i]*10+5 , -self.ic_length/2-10-20-5)
+               cr.move_to(-self.ic_width/2+self.pins_north[i]*(self.pin_width+self.pins_distance)+5 , -self.ic_length/2-10-20-5)
                #show vertical text
                cr.rotate(-math.pi/2)
                cr.show_text("North OUT"+str(self.pins_north[i]))
                cr.rotate(math.pi/2)
             else:
-               cr.move_to(-self.ic_width/2+self.pins_north[i]*10+5 , -self.ic_length/2-10-5)
+               cr.move_to(-self.ic_width/2+self.pins_north[i]*(self.pin_width+self.pins_distance)+5 , -self.ic_length/2-10-5)
                #show vertical text
                cr.rotate(-math.pi/2)
                cr.show_text(str(nom[0][2]))
                cr.rotate(math.pi/2)
             # naming inside IC border
             if not nom:
-               cr.move_to(-self.ic_width/2+self.pins_north[i]*10+5 , -self.ic_length/2-10-20+80)
+               cr.move_to(-self.ic_width/2+self.pins_north[i]*(self.pin_width+self.pins_distance)+5 , -self.ic_length/2-10-20+80)
                #show vertical text
                cr.rotate(-math.pi/2)
                cr.show_text("North IN "+str(self.pins_north[i]))
                cr.rotate(math.pi/2)
             else:
-               cr.move_to(-self.ic_width/2+self.pins_north[i]*10+5 , -self.ic_length/2-10+len(nom[0][3])*5)
+               cr.move_to(-self.ic_width/2+self.pins_north[i]*(self.pin_width+self.pins_distance)+5 , -self.ic_length/2-10+len(nom[0][3])*5)
                #show vertical text
                cr.rotate(-math.pi/2)
                cr.show_text(str(nom[0][3]))
@@ -1109,14 +1113,14 @@ class UKLCIG(Gtk.Window):
 
         # Markers on South
         for i in range(self.max_pins_per_width):
-            if (self.MOUSE_X-w/2) >= -self.ic_width/2+i*10+5 and (self.MOUSE_X-w/2) < -self.ic_width/2+i*10+5+5 and (self.MOUSE_Y-h/2) >= self.ic_length/2-10 and (self.MOUSE_Y-h/2) < self.ic_length/2+20:
+            if (self.MOUSE_X-w/2) >= -self.ic_width/2+i*(self.pin_width+self.pins_distance)+5 and (self.MOUSE_X-w/2) < -self.ic_width/2+i*(self.pin_width+self.pins_distance)+5+5 and (self.MOUSE_Y-h/2) >= self.ic_length/2-10 and (self.MOUSE_Y-h/2) < self.ic_length/2+20:
                 self.cur_pin_south = i       
                 cr.set_source_rgb(0.5, 0.2, 0.7)
                 #Highlight selected pin in blue
                 if self.cur_pin_selected == i and self.cur_direction == Directions.SOUTH:
                    cr.set_source_rgb(0.0, 0.0, 1.0)
                    cr.show_text("Selected Pin [South] "+str(i))
-                cr.move_to(-self.ic_width/2+i*10+5, self.ic_length/2-10+60)
+                cr.move_to(-self.ic_width/2+i*(self.pin_width+self.pins_distance)+5, self.ic_length/2-10+60)
                 #show vertical text
                 cr.rotate(-math.pi/2)
                 cr.show_text("South "+str(i))
@@ -1130,35 +1134,35 @@ class UKLCIG(Gtk.Window):
                    self.action_group.get_action("RemovePin").set_sensitive(False)
             else:
                 cr.set_source_rgb(1, 0.3, 0.9)
-            cr.rectangle(-self.ic_width/2+i*10+5 , self.ic_length/2, 1, 10)
+            cr.rectangle(-self.ic_width/2+i*(self.pin_width+self.pins_distance)+5 , self.ic_length/2, 1, 10)
             cr.fill()   
         for i in range(len(self.pins_south)):
             #print self.pins_south[i]
-            cr.rectangle(-self.ic_width/2+self.pins_south[i]*10+5 , self.ic_length/2, 1, 20)
+            cr.rectangle(-self.ic_width/2+self.pins_south[i]*(self.pin_width+self.pins_distance)+5 , self.ic_length/2, 1, 20)
             cr.fill()   
             nom = [x for x in self.populate if(x[0]==Directions.SOUTH and x[1]==self.pins_south[i])]
             # naming outside IC border
             if not nom:
-               cr.move_to(-self.ic_width/2+self.pins_south[i]*10+5 , self.ic_length/2+80)
+               cr.move_to(-self.ic_width/2+self.pins_south[i]*(self.pin_width+self.pins_distance)+5 , self.ic_length/2+80)
                #show vertical text
                cr.rotate(-math.pi/2)
                cr.show_text("South OUT"+str(self.pins_south[i]))
                cr.rotate(math.pi/2)
             else:
-               cr.move_to(-self.ic_width/2+self.pins_south[i]*10+5 , self.ic_length/2+len(nom[0][2])*5)
+               cr.move_to(-self.ic_width/2+self.pins_south[i]*(self.pin_width+self.pins_distance)+5 , self.ic_length/2+len(nom[0][2])*5)
                #show vertical text
                cr.rotate(-math.pi/2)
                cr.show_text(str(nom[0][2]))
                cr.rotate(math.pi/2)              
             # naming inside IC border
             if not nom:
-               cr.move_to(-self.ic_width/2+self.pins_south[i]*10+5 , self.ic_length/2-5)
+               cr.move_to(-self.ic_width/2+self.pins_south[i]*(self.pin_width+self.pins_distance)+5 , self.ic_length/2-5)
                #show vertical text
                cr.rotate(-math.pi/2)
                cr.show_text("South IN "+str(self.pins_south[i]))
                cr.rotate(math.pi/2)
             else:
-               cr.move_to(-self.ic_width/2+self.pins_south[i]*10+5 , self.ic_length/2-5)
+               cr.move_to(-self.ic_width/2+self.pins_south[i]*(self.pin_width+self.pins_distance)+5 , self.ic_length/2-5)
                #show vertical text
                cr.rotate(-math.pi/2)
                cr.show_text(str(nom[0][3]))
