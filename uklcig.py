@@ -279,7 +279,7 @@ class UKLCIG(Gtk.Window):
         self.cur_pin_name_label.modify_fg(Gtk.StateType.NORMAL, Gdk.Color.parse("purple")[1])
         self.cur_pin_name_label.set_use_markup(True)
         self.size_pin_name_label = Gtk.Label("")
-        self.size_pin_name_label.set_label("<b>Signal Text Size</b>")
+        self.size_pin_name_label.set_label("<b>Pin Text Size</b>")
         self.size_pin_name_label.modify_fg(Gtk.StateType.NORMAL, Gdk.Color.parse("darkgreen")[1])
         self.size_pin_name_label.set_use_markup(True)
         self.size_pin_name_entry = Gtk.Entry()
