@@ -36,6 +36,7 @@ This is a simple python based tool to generate IC Library Component PCB library 
 7. (a) Right click any IC boundary unit marker. 
    (b) Right click and select **'AddPin'**. 
    (c) Double Click on this newly added pin.
+   (d) Select signal and pin attributes.
    **Note:** Steps 8 - 13 pertain to this selected pin.
 
 8. Enter the **Signal Name** and **Signal Text Size**.
