@@ -409,12 +409,13 @@ class UKLCIG(Gtk.Window):
         self.vbox5.pack_start(self.cur_shape_label, False, False, 0)
 
         hseparator = Gtk.HSeparator()
+        hseparator1 = Gtk.HSeparator()
         self.update_pin_label = Gtk.Label("")
         self.update_pin_label.set_label("<b>Update Pin</b>")
         self.update_pin_label.modify_fg(Gtk.StateType.NORMAL, Gdk.Color.parse("red")[1])
         self.update_pin_label.set_use_markup(True)
         self.update_inst_label = Gtk.Label("")
-        self.update_inst_label.set_label("<b>1.Right click any IC boundary unit marker\n2.Click 'AddPin'\n3.Double click to select added pin\n4.Click the button below</b>")
+        self.update_inst_label.set_label("<b>1.Right click any IC boundary unit marker\n2.Click 'AddPin'\n3.Double click to select added pin\n4.Select signal/pin attributes\n5.Click the button below</b>")
         self.update_inst_label.modify_fg(Gtk.StateType.NORMAL, Gdk.Color.parse("blue")[1])
         self.update_inst_label.set_use_markup(True)
         self.update_pin_button = Gtk.Button("")
@@ -431,6 +432,7 @@ class UKLCIG(Gtk.Window):
 
         self.vbox6.pack_start(hseparator, False, False, 0)
         self.vbox6.pack_start(self.update_pin_label, False, False, 0)
+        self.vbox6.pack_start(hseparator1, False, False, 0)
         self.vbox6.pack_start(self.update_inst_label, False, False, 0)
         self.vbox6.pack_start(self.update_pin_button, False, False, 0)
         self.vbox6.pack_start(self.crosshair_button, False, False, 0)
